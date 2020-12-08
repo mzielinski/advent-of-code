@@ -89,27 +89,28 @@ public class Day08Main {
             if (index == sizeOfAllInstructions) {
                 // achieved end of the instructions
                 return true;
+            } else if (modifiedIndex == sizeOfAllInstructions) {
+                throw new RuntimeException("Cannot find any path which will not be finished with infinite loop");
+            } else {
+                // try to modify next index;
+                modifiedIndex++;
+                cleanup();
+                return false;
             }
-            modifiedIndex++;
-            cleanup();
-            return false;
         }
 
         @Override
         public Instruction calculateInstruction() {
             Instruction instruction = super.calculateInstruction();
-            if (modifiedIndex == index) {
-                return instruction.revert();
-            }
-            return instruction;
+            return modifiedIndex == index ? instruction.revert() : instruction;
         }
     }
 
     abstract static class Calculator {
 
+        protected int modifiedIndex = 0;
+        protected int index;
         private int accumulator;
-        int index;
-        int modifiedIndex = 0;
         private final List<Integer> passedIndexes = new ArrayList<>();
         private final List<Instruction> instructions;
 
