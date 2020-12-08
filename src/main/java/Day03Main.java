@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Day03Main {
 
-    class Day03MainPart2Input implements ReadFile<boolean[]> {
+    static class Day03MainPart2Input implements ReadFile<boolean[]> {
 
         @Override
         public boolean[] getRecordFromLine(String line) {
@@ -21,7 +21,7 @@ public class Day03Main {
     }
 
     private List<boolean[]> readFile(String filename) {
-        ReadFile<boolean[]> file = new Day03Main.Day03MainPart2Input();
+        ReadFile<boolean[]> file = new Day03MainPart2Input();
         return file.readFile(filename);
     }
 
