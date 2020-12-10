@@ -1,8 +1,11 @@
-package utils;
+package com.mzielinski.advent.of.code.utils;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import static java.util.Objects.requireNonNull;
 
 public interface MultilineReadFile<T> extends ReadFile<T> {
 
@@ -10,7 +13,8 @@ public interface MultilineReadFile<T> extends ReadFile<T> {
 
     default List<T> readFile(String filePath) {
         List<T> records = new ArrayList<>();
-        try (Scanner scanner = new Scanner(getClass().getResourceAsStream(filePath))) {
+        InputStream stream = requireNonNull(MultilineReadFile.class.getClassLoader().getResourceAsStream(filePath));
+        try (Scanner scanner = new Scanner(stream)) {
             StringBuilder next = new StringBuilder();
             while (scanner.hasNextLine()) {
                 String currentLine = scanner.nextLine();

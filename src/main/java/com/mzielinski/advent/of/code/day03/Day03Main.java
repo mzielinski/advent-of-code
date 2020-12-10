@@ -1,4 +1,6 @@
-import utils.ReadFile;
+package com.mzielinski.advent.of.code.day03;
+
+import com.mzielinski.advent.of.code.utils.ReadFile;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,5 +1,7 @@
-import utils.MultilineReadFile;
-import utils.ReadFile;
+package com.mzielinski.advent.of.code.day06;
+
+import com.mzielinski.advent.of.code.utils.MultilineReadFile;
+import com.mzielinski.advent.of.code.utils.ReadFile;
 
 import java.util.*;
 import java.util.function.BiFunction;

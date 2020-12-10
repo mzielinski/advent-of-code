@@ -1,4 +1,6 @@
-import utils.MultilineReadFile;
+package com.mzielinski.advent.of.code.day04;
+
+import com.mzielinski.advent.of.code.utils.MultilineReadFile;
 
 import java.util.Arrays;
 import java.util.HashMap;

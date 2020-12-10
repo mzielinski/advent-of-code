@@ -1,3 +1,5 @@
+package com.mzielinski.advent.of.code.day09
+
 import spock.lang.Specification
 import spock.lang.Unroll
 

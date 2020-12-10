@@ -1,4 +1,6 @@
-import utils.LineReader;
+package com.mzielinski.advent.of.code.day09;
+
+import com.mzielinski.advent.of.code.utils.LineReader;
 
 import java.util.*;
 import java.util.stream.LongStream;

@@ -1,4 +1,6 @@
-import utils.ReadFile;
+package com.mzielinski.advent.of.code.day05;
+
+import com.mzielinski.advent.of.code.utils.ReadFile;
 
 import java.util.*;
 

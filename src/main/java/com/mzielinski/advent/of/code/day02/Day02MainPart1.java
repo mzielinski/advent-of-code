@@ -1,3 +1,5 @@
+package com.mzielinski.advent.of.code.day02;
+
 public class Day02MainPart1 {
 
     private static class Input {

@@ -1,4 +1,8 @@
-class Day02MainPart2Test extends spock.lang.Specification {
+package com.mzielinski.advent.of.code.day02
+
+import spock.lang.Specification
+
+class Day02MainPart2Test extends Specification {
 
     def 'should check test vector'() {
         def out = new Day02MainPart2()

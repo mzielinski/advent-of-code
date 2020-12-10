@@ -1,3 +1,5 @@
+package com.mzielinski.advent.of.code.day01;
+
 import java.math.BigDecimal;
 
 class Day01Main {
