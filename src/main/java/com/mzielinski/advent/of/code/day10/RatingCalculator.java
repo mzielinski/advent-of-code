@@ -1,20 +1,16 @@
 package com.mzielinski.advent.of.code.day10;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class RatingCalculator {
 
-    private final Map<Long, Rating> ratings = new HashMap<>();
-
-    long calculateDifferencesBetween(Rating... rating) {
+    long calculateDifferencesBetween(Map<Long, Rating> input, Rating... ratings) {
         Map<Rating, Long> sizes = new HashMap<>();
-        ratings.forEach((key, value) -> {
-            for (Rating r : rating) {
-                if (r == value) {
-                    Long currentSize = sizes.getOrDefault(r, 0L);
-                    sizes.put(r, ++currentSize);
+        input.forEach((key, value) -> {
+            for (Rating rating : ratings) {
+                if (rating == value) {
+                    Long currentSize = sizes.getOrDefault(rating, 0L);
+                    sizes.put(rating, ++currentSize);
                 }
             }
         });
@@ -22,32 +18,41 @@ class RatingCalculator {
                 .reduce(1L, (partialResult, size) -> partialResult * size);
     }
 
-    void calculateRatingMap(List<Long> input) {
-        // I am not proud of this implementation. I will try to rewrite it when I will have more time ;)
-        input.add(0L);
-        input.sort(Long::compareTo);
+    Map<Long, Rating> calculateRatingMap(List<Long> list) {
+        Map<Long, Rating> ratings = new HashMap<>();
         for (Rating rating : Rating.values()) {
-            for (long joltage : input) {
-                if (input.contains(joltage + rating.getNumber())) {
+            for (long joltage : list) {
+                if (list.contains(joltage + rating.getNumber())) {
                     if (!ratings.containsKey(joltage)) {
                         ratings.put(joltage, rating);
                     }
                 }
             }
         }
-        ratings.put(findMaxValue(input), Rating.THREE);
-        System.out.println(ratings);
+        ratings.put(list.get(list.size() - 1), Rating.THREE);
+        return ratings;
     }
 
-    private long findMaxValue(List<Long> input) {
-        return input.stream()
-                .mapToLong(a -> a)
-                .summaryStatistics()
-                .getMax();
+    long calculateArrangements(List<Long> input, Map<Integer, Long> cache) {
+        Integer hash = generateHashFromList(input);
+        if (cache.containsKey(hash)) {
+            return cache.get(hash);
+        }
+        long result = 1;
+        for (int i = 1; i < input.size() - 1; i++) {
+            Long previous = input.get(i - 1);
+            Long next = input.get(i + 1);
+            if (Rating.isValid(next - previous)) {
+                List<Long> subList = new ArrayList<>(List.of(previous));
+                subList.addAll(input.subList(i + 1, input.size()));
+                result += calculateArrangements(subList, cache);
+            }
+        }
+        cache.put(hash, result);
+        return result;
     }
 
-    @Override
-    public String toString() {
-        return ratings.toString();
+    private Integer generateHashFromList(List<Long> input) {
+        return Objects.hash(input.toArray());
     }
 }
