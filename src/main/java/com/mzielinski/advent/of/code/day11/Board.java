@@ -9,7 +9,7 @@ public class Board {
 
     public enum Piece {
 
-        NIL('→'), FLOOR('.'), EMPTY_SEAT('L'), OCCUPIED_SEAT('#');
+        FLOOR('.'), EMPTY_SEAT('L'), OCCUPIED_SEAT('#');
 
         private final char value;
 
@@ -18,7 +18,9 @@ public class Board {
         }
 
         public static Piece valueOf(char value) {
-            return Arrays.stream(Piece.values()).filter(piece -> piece.value == value).findFirst()
+            return Arrays.stream(Piece.values())
+                    .filter(piece -> piece.value == value)
+                    .findFirst()
                     .orElseThrow(() -> new IllegalArgumentException("Value " + value + " is not supported as a Piece"));
         }
 
@@ -47,7 +49,7 @@ public class Board {
                 .orElseThrow(() -> new IllegalStateException("Board cannot be empty"));
     }
 
-    public boolean validCoordinates(int y, int x) {
+    public boolean outOfBoard(int y, int x) {
         return y >= 0 && x >= 0 && y < rowSize() && x < columnSize();
     }
 
