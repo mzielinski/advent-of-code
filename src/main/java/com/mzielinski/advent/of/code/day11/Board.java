@@ -5,11 +5,11 @@ import java.util.*;
 import static com.mzielinski.advent.of.code.day11.Board.Piece.OCCUPIED_SEAT;
 import static java.util.stream.Collectors.toList;
 
-class Board {
+public class Board {
 
-    enum Piece {
+    public enum Piece {
 
-        FLOOR('.'), EMPTY_SEAT('L'), OCCUPIED_SEAT('#');
+        NIL('→'), FLOOR('.'), EMPTY_SEAT('L'), OCCUPIED_SEAT('#');
 
         private final char value;
 
@@ -47,6 +47,10 @@ class Board {
                 .orElseThrow(() -> new IllegalStateException("Board cannot be empty"));
     }
 
+    public boolean validCoordinates(int y, int x) {
+        return y >= 0 && x >= 0 && y < rowSize() && x < columnSize();
+    }
+
     public int rowSize() {
         return Optional.of(board)
                 .map(List::size)
@@ -66,7 +70,7 @@ class Board {
                 .filter(piece -> piece == OCCUPIED_SEAT).count();
     }
 
-    public Piece[][] covertToArray() {
+    public Piece[][] toArray() {
         return board.stream()
                 .map(arr -> arr.toArray(Piece[]::new))
                 .toArray(Piece[][]::new);
