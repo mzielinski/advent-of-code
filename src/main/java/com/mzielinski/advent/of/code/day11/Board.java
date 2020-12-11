@@ -76,7 +76,7 @@ public class Board {
                 .toArray(Piece[][]::new);
     }
 
-    public static Board convertTo(String path) {
+    public static Board instanceOf(String path) {
         List<List<Piece>> lists = new BoardReader().readFile(path);
         return new Board(lists);
     }

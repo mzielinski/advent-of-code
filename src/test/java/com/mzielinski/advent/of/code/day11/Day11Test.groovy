@@ -8,25 +8,21 @@ import static com.mzielinski.advent.of.code.day11.Board.Piece.FLOOR
 class Day11Test extends Specification {
 
     @Unroll
-    def 'should verify that board #initialBoard is changed to #expectedBoard for single round'() {
+    def 'should verify that board #stage is changed to #nextStage for single round'() {
         given:
-        def board = Board.convertTo(initialBoard)
+        def board = Board.instanceOf("day11/01-stage-0${stage}.txt")
 
         expect:
-        new Day11Part1().performSingleRound(board) == Board.convertTo(expectedBoard)
+        new Day11Part1().performSingleRound(board) == Board.instanceOf("day11/01-stage-0${stage + 1}.txt")
 
         where:
-        initialBoard            || expectedBoard
-        'day11/01-stage-01.txt' || 'day11/01-stage-02.txt'
-        'day11/01-stage-02.txt' || 'day11/01-stage-03.txt'
-        'day11/01-stage-03.txt' || 'day11/01-stage-04.txt'
-        'day11/01-stage-04.txt' || 'day11/01-stage-05.txt'
-        'day11/01-stage-05.txt' || 'day11/01-stage-06.txt'
+        stage << (1..5)
+        nextStage = stage + 1
     }
 
     def 'should calculate how many seats are occupied after stabilization in part 1'() {
         given:
-        Board stableBoard = new Day11Part1().findStableBoard(Board.convertTo(initialBoard))
+        Board stableBoard = new Day11Part1().findStableBoard(Board.instanceOf(initialBoard))
 
         expect:
         stableBoard.calculateNumberOfOccupiedSeats() == expectedResult
@@ -41,7 +37,7 @@ class Day11Test extends Specification {
     def 'should find #result neighbors for board #initialBoard'() {
         given:
         def objectUnderTest = new Day11Part2()
-        def board = Board.convertTo(initialBoard)
+        def board = Board.instanceOf(initialBoard)
 
         expect:
         objectUnderTest.countNeighbours(board, row, column, { it != FLOOR }) == result
@@ -57,7 +53,7 @@ class Day11Test extends Specification {
     @Unroll
     def 'should calculate how many seats are occupied after stabilization in part 2'() {
         given:
-        Board stableBoard = new Day11Part2().findStableBoard(Board.convertTo(initialBoard))
+        Board stableBoard = new Day11Part2().findStableBoard(Board.instanceOf(initialBoard))
 
         expect:
         stableBoard.calculateNumberOfOccupiedSeats() == expectedResult
@@ -71,10 +67,10 @@ class Day11Test extends Specification {
     @Unroll
     def 'should verify board modification from #stage to #nextStage for single round in part 2'() {
         given:
-        def board = Board.convertTo("day11/04-stage-0${stage}.txt")
+        def board = Board.instanceOf("day11/04-stage-0${stage}.txt")
 
         expect:
-        new Day11Part2().performSingleRound(board) == Board.convertTo("day11/04-stage-0${stage + 1}.txt")
+        new Day11Part2().performSingleRound(board) == Board.instanceOf("day11/04-stage-0${stage + 1}.txt")
 
         where:
         stage << (1..6)
