@@ -1,10 +1,12 @@
 package com.mzielinski.advent.of.code.day12.model;
 
+import com.mzielinski.advent.of.code.day12.model.position.Position;
+
 public enum Direction {
     NORTH {
         @Override
-        Position calculatePosition(Position position, Instruction instruction) {
-            if (instruction.command() == Command.F) return position.changeNorthPosition(instruction.value());
+        public Position calculatePosition(Position position, Instruction instruction) {
+            if (instruction.command() == Command.F) return position.moveForward(instruction, this);
             return super.calculatePosition(position, instruction);
         }
 
@@ -28,8 +30,8 @@ public enum Direction {
         }
     }, SOUTH {
         @Override
-        Position calculatePosition(Position position, Instruction instruction) {
-            if (instruction.command() == Command.F) return position.changeSouthPosition(instruction.value());
+        public Position calculatePosition(Position position, Instruction instruction) {
+            if (instruction.command() == Command.F) return position.moveForward(instruction, this);
             return super.calculatePosition(position, instruction);
         }
 
@@ -53,8 +55,8 @@ public enum Direction {
         }
     }, WEST {
         @Override
-        Position calculatePosition(Position position, Instruction instruction) {
-            if (instruction.command() == Command.F) return position.changeWestPosition(instruction.value());
+        public Position calculatePosition(Position position, Instruction instruction) {
+            if (instruction.command() == Command.F) return position.moveForward(instruction, this);
             return super.calculatePosition(position, instruction);
         }
 
@@ -78,8 +80,8 @@ public enum Direction {
         }
     }, EAST {
         @Override
-        Position calculatePosition(Position position, Instruction instruction) {
-            if (instruction.command() == Command.F) return position.changeEastPosition(instruction.value());
+        public Position calculatePosition(Position position, Instruction instruction) {
+            if (instruction.command() == Command.F) return position.moveForward(instruction, this);
             return super.calculatePosition(position, instruction);
         }
 
@@ -103,12 +105,12 @@ public enum Direction {
         }
     };
 
-    Position calculatePosition(Position position, Instruction instruction) {
+    public <T extends Position> Position calculatePosition(T position, Instruction instruction) {
         return switch (instruction.command()) {
-            case N -> position.changeNorthPosition(instruction.value());
-            case S -> position.changeSouthPosition(instruction.value());
-            case E -> position.changeEastPosition(instruction.value());
-            case W -> position.changeWestPosition(instruction.value());
+            case N -> position.changeNorthPosition(instruction, this);
+            case S -> position.changeSouthPosition(instruction, this);
+            case E -> position.changeEastPosition(instruction, this);
+            case W -> position.changeWestPosition(instruction, this);
             default -> position;
         };
     }

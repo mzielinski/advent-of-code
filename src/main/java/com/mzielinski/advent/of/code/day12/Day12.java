@@ -3,36 +3,37 @@ package com.mzielinski.advent.of.code.day12;
 import com.mzielinski.advent.of.code.day12.input.InstructionsReader;
 import com.mzielinski.advent.of.code.day12.model.Direction;
 import com.mzielinski.advent.of.code.day12.model.Instruction;
-import com.mzielinski.advent.of.code.day12.model.Position;
+import com.mzielinski.advent.of.code.day12.model.position.Position;
+import com.mzielinski.advent.of.code.day12.model.position.StandardPositionChanger;
+import com.mzielinski.advent.of.code.day12.model.position.WayPointPositionChanger;
 
 import java.util.stream.Stream;
 
-public class Day12 {
+public record Day12(FerryMap<Position> ferryMap) {
 
-    public static class FerryMap {
+    public static class FerryMap<T extends Position> {
 
-        private final Position position;
+        private final T position;
         private final Direction direction;
 
-        public FerryMap() {
-            this.position = Position.INITIAL;
-            this.direction = Direction.EAST;
+        public FerryMap(T position) {
+            this(position, Direction.EAST);
         }
 
-        public FerryMap(Position position, Direction direction) {
+        public FerryMap(T position, Direction direction) {
             this.position = position;
             this.direction = direction;
         }
 
-        public FerryMap applyInstruction(Instruction instruction) {
+        public FerryMap<Position> applyInstruction(Instruction instruction) {
             return instruction.calculatePosition(this);
         }
 
         int calculateManhattanDistance() {
-            return position.east() + position.north() + position.west() + position.south();
+            return position.calculateManhattanDistance();
         }
 
-        public Position getPosition() {
+        public T getPosition() {
             return position;
         }
 
@@ -46,12 +47,18 @@ public class Day12 {
         }
     }
 
-    private final FerryMap map = new FerryMap();
+    public static Day12 part1() {
+        return new Day12(new FerryMap<>(StandardPositionChanger.INITIAL));
+    }
 
-    public FerryMap calculatePositionsOnMap(String filePath) {
+    public static Day12 part2() {
+        return new Day12(new FerryMap<>(WayPointPositionChanger.INITIAL));
+    }
+
+    public FerryMap<? extends Position> calculatePositionsOnMap(String filePath) {
         try (InstructionsReader instructions = new InstructionsReader(filePath)) {
             Stream<Instruction> stream = instructions.getStream();
-            return stream.reduce(map, FerryMap::applyInstruction, ($1, $2) -> null);
+            return stream.reduce(ferryMap, FerryMap::applyInstruction, ($1, $2) -> null);
         }
     }
 }

@@ -44,6 +44,7 @@ public class Board {
 
     public int columnSize() {
         return Optional.of(board)
+                .filter(board -> board.size() > 0)
                 .map(board -> board.get(0))
                 .map(List::size)
                 .orElseThrow(() -> new IllegalStateException("Board cannot be empty"));
