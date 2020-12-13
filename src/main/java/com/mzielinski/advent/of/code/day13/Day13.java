@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 
 import static java.util.Objects.requireNonNull;
@@ -68,21 +67,26 @@ public class Day13 {
         Note note = NoteReader.readFile(filePath);
         BigDecimal nextTimestamp = note.timestamp;
         while (true) {
-            BigDecimal finalNextTimestamp = BigDecimal.valueOf(nextTimestamp.longValue());
-            System.out.println(finalNextTimestamp);
-            final Optional<BusId> bus = note.buses.stream()
-                    .filter(BusId::isValidId)
-                    .filter(busId -> {
-                        final BigDecimal nextTimeStamp = finalNextTimestamp.add(BigDecimal.valueOf(busId.index));
-                        return nextTimeStamp.longValue() % busId.getBusId() != 0;
-                    })
-                    .findAny();
-            if (bus.isEmpty()) {
-                // found valid sequence
-                return finalNextTimestamp.longValue();
-            } else {
-                nextTimestamp = finalNextTimestamp.add(BigDecimal.ONE);
+            // not efficient implementation ;(
+            if (nextTimestamp.longValue() % 1000000L == 0) {
+                System.out.println(nextTimestamp);
             }
+
+            boolean validSequence = true;
+            for (int i = 0; i < note.buses().size(); i++) {
+                BusId bus = note.buses().get(i);
+                if (bus.isValidId()) {
+                    final BigDecimal nextTimeStamp = nextTimestamp.add(BigDecimal.valueOf(bus.index));
+                    if ((nextTimeStamp.longValue() % bus.getBusId()) != 0) {
+                        validSequence = false;
+                        break;
+                    }
+                }
+            }
+            if (validSequence) {
+                return nextTimestamp.longValue();
+            }
+            nextTimestamp = nextTimestamp.add(BigDecimal.ONE);
         }
     }
 }
