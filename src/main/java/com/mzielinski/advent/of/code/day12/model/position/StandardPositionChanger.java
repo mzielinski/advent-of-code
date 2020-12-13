@@ -48,47 +48,47 @@ public record StandardPositionChanger(int north, int south, int east, int west,
 
     public StandardPositionChanger changeNorthPosition(Instruction instruction) {
         return new StandardPositionChanger(
-                Math.max(north - south + instruction.value(), 0),
-                Math.max(south - instruction.value(), 0),
-                east,
-                west,
-                direction);
+                Math.max(north() - south() + instruction.value(), 0),
+                Math.max(south() - instruction.value(), 0),
+                east(),
+                west(),
+                direction());
     }
 
     public StandardPositionChanger changeSouthPosition(Instruction instruction) {
         return new StandardPositionChanger(
-                Math.max(north - instruction.value(), 0),
-                Math.max(south - north + instruction.value(), 0),
-                east,
-                west,
-                direction);
+                Math.max(north() - instruction.value(), 0),
+                Math.max(south() - north() + instruction.value(), 0),
+                east(),
+                west(),
+                direction());
     }
 
     public StandardPositionChanger changeEastPosition(Instruction instruction) {
         return new StandardPositionChanger(
-                north,
-                south,
-                Math.max(east - west + instruction.value(), 0),
-                Math.max(west - instruction.value(), 0),
-                direction);
+                north(),
+                south(),
+                Math.max(east() - west() + instruction.value(), 0),
+                Math.max(west() - instruction.value(), 0),
+                direction());
     }
 
     public StandardPositionChanger changeWestPosition(Instruction instruction) {
         return new StandardPositionChanger(
-                north,
-                south,
-                Math.max(east - instruction.value(), 0),
-                Math.max(west - east + instruction.value(), 0),
-                direction);
+                north(),
+                south(),
+                Math.max(east() - instruction.value(), 0),
+                Math.max(west() - east() + instruction.value(), 0),
+                direction());
     }
 
     @Override
     public Position recalculateDirection(Direction direction, Instruction instruction) {
         final Direction next = switch (direction) {
-            case NORTH -> direction.calculateNewDirection(instruction, direction(), EAST, SOUTH, WEST);
-            case SOUTH -> direction.calculateNewDirection(instruction, direction(), WEST, NORTH, EAST);
-            case EAST -> direction.calculateNewDirection(instruction, direction(), SOUTH, WEST, NORTH);
-            case WEST -> direction.calculateNewDirection(instruction, direction(), NORTH, EAST, SOUTH);
+            case NORTH -> direction.calculateNewDirection(instruction, EAST, SOUTH, WEST);
+            case SOUTH -> direction.calculateNewDirection(instruction, WEST, NORTH, EAST);
+            case EAST -> direction.calculateNewDirection(instruction, SOUTH, WEST, NORTH);
+            case WEST -> direction.calculateNewDirection(instruction, NORTH, EAST, SOUTH);
         };
         return StandardPositionChanger.of(this, next);
     }

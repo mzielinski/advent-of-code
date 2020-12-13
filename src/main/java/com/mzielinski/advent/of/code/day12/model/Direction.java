@@ -40,21 +40,21 @@ public enum Direction {
         };
     }
 
-    public Direction calculateNewDirection(Instruction instruction, Direction current, Direction... directions) {
+    public Direction calculateNewDirection(Instruction instruction, Direction... directions) {
         return switch (instruction.command()) {
             case R -> switch (instruction.value()) {
                 case 90 -> directions[0];
                 case 180 -> directions[1];
                 case 270 -> directions[2];
-                default -> current;
+                default -> this;
             };
             case L -> switch (instruction.value()) {
                 case 90 -> directions[2];
                 case 180 -> directions[1];
                 case 270 -> directions[0];
-                default -> current;
+                default -> this;
             };
-            default -> current;
+            default -> this;
         };
     }
 }
