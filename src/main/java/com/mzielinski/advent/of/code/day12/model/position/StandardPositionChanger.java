@@ -3,8 +3,6 @@ package com.mzielinski.advent.of.code.day12.model.position;
 import com.mzielinski.advent.of.code.day12.model.Direction;
 import com.mzielinski.advent.of.code.day12.model.Instruction;
 
-import java.util.Objects;
-
 import static com.mzielinski.advent.of.code.day12.model.Direction.*;
 
 public record StandardPositionChanger(int north, int south, int east, int west,
@@ -18,22 +16,6 @@ public record StandardPositionChanger(int north, int south, int east, int west,
 
     public static StandardPositionChanger of(StandardPositionChanger position, Direction direction) {
         return new StandardPositionChanger(position.north(), position.south(), position.east(), position.west(), direction);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StandardPositionChanger position = (StandardPositionChanger) o;
-        return north == position.north
-                && south == position.south
-                && east == position.east
-                && west == position.west;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(north, south, east, west);
     }
 
     @Override

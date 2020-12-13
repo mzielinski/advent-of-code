@@ -4,8 +4,6 @@ import com.mzielinski.advent.of.code.day12.model.Direction;
 import com.mzielinski.advent.of.code.day12.model.Instruction;
 import com.mzielinski.advent.of.code.day12.model.Rotation;
 
-import java.util.Objects;
-
 import static com.mzielinski.advent.of.code.day12.model.Direction.EAST;
 
 public record WayPointPositionChanger(int north, int south, int east, int west,
@@ -20,22 +18,6 @@ public record WayPointPositionChanger(int north, int south, int east, int west,
 
     public static WayPointPositionChanger of(int north, int south, int east, int west, StandardPositionChanger wayPoint) {
         return new WayPointPositionChanger(north, south, east, west, wayPoint);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        WayPointPositionChanger position = (WayPointPositionChanger) o;
-        return north == position.north
-                && south == position.south
-                && east == position.east
-                && west == position.west;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(north, south, east, west);
     }
 
     @Override
