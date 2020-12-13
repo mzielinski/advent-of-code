@@ -8,10 +8,10 @@ class Day12Test extends Specification {
     @Unroll
     def 'should calculate #result as Manhattan distance for file #filepath and #part'() {
         when:
-        def ferryMap = aoc.calculatePositionsOnMap(filepath)
+        def ferry = aoc.calculatePositionsOnMap(filepath)
 
         then:
-        ferryMap.calculateManhattanDistance() == result
+        ferry.calculateManhattanDistance() == result
 
         where:
         part    | aoc           | filepath       || result

@@ -1,6 +1,5 @@
 package com.mzielinski.advent.of.code.day12.model;
 
-import com.mzielinski.advent.of.code.day12.Day12.FerryMap;
 import com.mzielinski.advent.of.code.day12.model.position.Position;
 
 public record Instruction(Command command, int value) {
@@ -11,14 +10,15 @@ public record Instruction(Command command, int value) {
         return new Instruction(command, value);
     }
 
+    public Ferry<Position> calculatePosition(Position position) {
+        Position newPosition = position
+                .recalculateDirection(position.direction(), this)
+                .recalculatePosition(this);
+        return new Ferry<>(newPosition);
+    }
+
     @Override
     public String toString() {
         return "Command: " + command + ", value: " + value;
-    }
-
-    public FerryMap<Position> calculatePosition(FerryMap<? extends Position> map) {
-        return new FerryMap<>(map.getPosition()
-                .recalculateDirection(map.getPosition().direction(), this)
-                .recalculatePosition(this));
     }
 }
