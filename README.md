@@ -25,6 +25,7 @@ complicated is challenge and how much time I have such day.
 * [Day 10](https://github.com/mzielinski/advent-of-code-2020/blob/master/src/main/java/com/mzielinski/advent/of/code/day10)
 * [Day 11](https://github.com/mzielinski/advent-of-code-2020/blob/master/src/main/java/com/mzielinski/advent/of/code/day11)
 * [Day 12](https://github.com/mzielinski/advent-of-code-2020/blob/master/src/main/java/com/mzielinski/advent/of/code/day12)
+* [Day 13](https://github.com/mzielinski/advent-of-code-2020/blob/master/src/main/java/com/mzielinski/advent/of/code/day13)
 
 ###Tests:
 * [Spock → Day 02 Part 2](https://github.com/mzielinski/advent-of-code-2020/blob/master/src/main/java/com/mzielinski/advent/of/code/day02/Day02MainPart2Test.groovy)
@@ -32,3 +33,4 @@ complicated is challenge and how much time I have such day.
 * [Spock → Day 10](https://github.com/mzielinski/advent-of-code-2020/blob/master/src/test/java/com/mzielinski/advent/of/code/day10/Day10Test.groovy)
 * [Spock → Day 11](https://github.com/mzielinski/advent-of-code-2020/blob/master/src/test/java/com/mzielinski/advent/of/code/day11/Day11Test.groovy)
 * [Spock → Day 12](https://github.com/mzielinski/advent-of-code-2020/blob/master/src/test/java/com/mzielinski/advent/of/code/day12/Day12Test.groovy)
+* [Spock → Day 13](https://github.com/mzielinski/advent-of-code-2020/blob/master/src/test/java/com/mzielinski/advent/of/code/day13/Day13Test.groovy)

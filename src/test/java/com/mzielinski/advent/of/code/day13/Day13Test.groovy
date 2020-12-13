@@ -29,6 +29,6 @@ class Day13Test extends Specification {
         'day13/05.txt'       || 779210
         'day13/06.txt'       || 1261476
         'day13/07.txt'       || 1202161486
-        'day13/02-part2.txt' || 100000000000000
+        'day13/02-part2.txt' || 327300950120029
     }
 }

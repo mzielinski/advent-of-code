@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import static java.util.Objects.requireNonNull;
 
@@ -17,11 +18,13 @@ public class Day13 {
 
     record BusId(int index, String busId) {
 
+        private static final Pattern pattern = Pattern.compile("[0-9]+");
+
         public boolean isValidId() {
-            return busId.matches("[\\d]+");
+            return pattern.matcher(busId).matches();
         }
 
-        public Integer getBusId() {
+        public Integer id() {
             return Integer.parseInt(busId);
         }
     }
@@ -54,9 +57,9 @@ public class Day13 {
         while (true) {
             for (BusId busId : note.buses) {
                 if (!busId.isValidId()) continue;
-                if (nextTimestamp.longValue() % busId.getBusId() == 0) {
+                if (nextTimestamp.longValue() % busId.id() == 0) {
                     final BigDecimal foundTimeStamp = nextTimestamp.subtract(note.timestamp);
-                    return foundTimeStamp.multiply(BigDecimal.valueOf(busId.getBusId())).longValue();
+                    return foundTimeStamp.multiply(BigDecimal.valueOf(busId.id())).longValue();
                 }
             }
             nextTimestamp = nextTimestamp.add(BigDecimal.ONE);
@@ -65,28 +68,27 @@ public class Day13 {
 
     public long findTheEarliestBusPart2(String filePath) {
         Note note = NoteReader.readFile(filePath);
-        BigDecimal nextTimestamp = note.timestamp;
-        while (true) {
-            // not efficient implementation ;(
-            if (nextTimestamp.longValue() % 1000000L == 0) {
-                System.out.println(nextTimestamp);
-            }
+        long product = note.buses.stream()
+                .filter(BusId::isValidId)
+                .mapToLong(BusId::id)
+                .reduce((a, b) -> a * b)
+                .orElse(0L);
+        long sum = note.buses.stream()
+                .filter(BusId::isValidId)
+                .mapToLong(bus -> bus.index * (product / bus.id()) * inverseModulo(product / bus.id(), bus.id()))
+                .sum();
+        return product - sum % product;
+    }
 
-            boolean validSequence = true;
-            for (int i = 0; i < note.buses().size(); i++) {
-                BusId bus = note.buses().get(i);
-                if (bus.isValidId()) {
-                    final BigDecimal nextTimeStamp = nextTimestamp.add(BigDecimal.valueOf(bus.index));
-                    if ((nextTimeStamp.longValue() % bus.getBusId()) != 0) {
-                        validSequence = false;
-                        break;
-                    }
-                }
-            }
-            if (validSequence) {
-                return nextTimestamp.longValue();
-            }
-            nextTimestamp = nextTimestamp.add(BigDecimal.ONE);
+    // Math concept of "inverse modulo". It is able to calculate result in quick time, much more quicker
+    // than brute-force with ```for``` loop.
+    // I found this concept in the Internet. I would have never solved this puzzle by my self without this suggestion.
+    // I finished studies too long time ago ¯\__( ツ )__/¯
+    long inverseModulo(long x, long y) {
+        if (x != 0) {
+            long modulo = y % x;
+            return modulo == 0 ? 1 : y - inverseModulo(modulo, x) * y / x;
         }
+        return 0;
     }
 }
