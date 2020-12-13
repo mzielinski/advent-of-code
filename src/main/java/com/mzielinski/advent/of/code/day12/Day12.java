@@ -10,19 +10,10 @@ import java.util.stream.Stream;
 
 public record Day12(FerryMap<Position> ferryMap) {
 
-    public static class FerryMap<T extends Position> {
-
-        private final T position;
-
-        public FerryMap(T position) {
-            this.position = position;
-        }
+    public static record FerryMap<T extends Position>(T position) {
 
         public FerryMap<Position> applyInstruction(Instruction instruction) {
-            final FerryMap<Position> map = instruction.calculatePosition(this);
-            System.out.println(instruction + " " + map);
-            System.out.println();
-            return map;
+            return instruction.calculatePosition(this);
         }
 
         int calculateManhattanDistance() {
