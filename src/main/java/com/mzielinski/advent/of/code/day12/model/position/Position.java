@@ -5,15 +5,23 @@ import com.mzielinski.advent.of.code.day12.model.Instruction;
 
 public interface Position {
 
+    int calculateManhattanDistance();
+
+    Direction direction();
+
     Position moveForward(Instruction instruction, Direction direction);
 
-    Position changeNorthPosition(Instruction instruction, Direction direction);
+    Position changeNorthPosition(Instruction instruction);
 
-    Position changeSouthPosition(Instruction instruction, Direction direction);
+    Position changeSouthPosition(Instruction instruction);
 
-    Position changeEastPosition(Instruction instruction, Direction direction);
+    Position changeEastPosition(Instruction instruction);
 
-    Position changeWestPosition(Instruction instruction, Direction direction);
+    Position changeWestPosition(Instruction instruction);
 
-    int calculateManhattanDistance();
+    Position recalculateDirection(Direction nextDirection, Instruction instruction);
+
+    default Position recalculatePosition(Instruction instruction) {
+        return direction().calculatePosition(this, instruction);
+    }
 }

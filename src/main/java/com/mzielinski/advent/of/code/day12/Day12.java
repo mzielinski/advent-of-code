@@ -1,7 +1,6 @@
 package com.mzielinski.advent.of.code.day12;
 
 import com.mzielinski.advent.of.code.day12.input.InstructionsReader;
-import com.mzielinski.advent.of.code.day12.model.Direction;
 import com.mzielinski.advent.of.code.day12.model.Instruction;
 import com.mzielinski.advent.of.code.day12.model.position.Position;
 import com.mzielinski.advent.of.code.day12.model.position.StandardPositionChanger;
@@ -14,19 +13,16 @@ public record Day12(FerryMap<Position> ferryMap) {
     public static class FerryMap<T extends Position> {
 
         private final T position;
-        private final Direction direction;
 
         public FerryMap(T position) {
-            this(position, Direction.EAST);
-        }
-
-        public FerryMap(T position, Direction direction) {
             this.position = position;
-            this.direction = direction;
         }
 
         public FerryMap<Position> applyInstruction(Instruction instruction) {
-            return instruction.calculatePosition(this);
+            final FerryMap<Position> map = instruction.calculatePosition(this);
+            System.out.println(instruction + " " + map);
+            System.out.println();
+            return map;
         }
 
         int calculateManhattanDistance() {
@@ -37,13 +33,9 @@ public record Day12(FerryMap<Position> ferryMap) {
             return position;
         }
 
-        public Direction getDirection() {
-            return direction;
-        }
-
         @Override
         public String toString() {
-            return "Position: " + position + ", direction: " + direction;
+            return "Position: " + position;
         }
     }
 

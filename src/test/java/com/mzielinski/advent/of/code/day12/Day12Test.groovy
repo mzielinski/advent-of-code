@@ -19,5 +19,6 @@ class Day12Test extends Specification {
         'part1' | Day12.part1() | 'day12/02.txt' || 1589
         'part2' | Day12.part2() | 'day12/01.txt' || 286
         'part2' | Day12.part2() | 'day12/02.txt' || 23960
+        'part2' | Day12.part2() | 'day12/03.txt' || 600
     }
 }

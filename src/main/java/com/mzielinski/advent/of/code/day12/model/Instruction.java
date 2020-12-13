@@ -17,8 +17,8 @@ public record Instruction(Command command, int value) {
     }
 
     public FerryMap<Position> calculatePosition(FerryMap<? extends Position> map) {
-        Direction newDirection = map.getDirection().calculateNewDirection(this);
-        Position newPosition = newDirection.calculatePosition(map.getPosition(), this);
-        return new FerryMap<>(newPosition, newDirection);
+        return new FerryMap<>(map.getPosition()
+                .recalculateDirection(map.getPosition().direction(), this)
+                .recalculatePosition(this));
     }
 }
