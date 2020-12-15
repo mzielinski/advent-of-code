@@ -1,48 +1,48 @@
 package com.mzielinski.advent.of.code.utils;
 
-import com.mzielinski.advent.of.code.day14.Day14.Bit;
+import com.mzielinski.advent.of.code.day14.Bits;
 
 import java.util.*;
 
-public class AutoPopulatingList implements List<Bit> {
+public class AutoPopulatingList implements List<Bits> {
 
     /**
      * The {@link List} that all operations are eventually delegated to.
      */
-    private final List<Bit> backingList;
+    private final List<Bits> backingList;
 
     /**
      * The {@link ElementFactory} to use to create new {@link List} elements
      * on demand.
      */
-    private final ElementFactory<Bit> elementFactory;
+    private final ElementFactory<Bits> elementFactory;
 
     /**
      * Creates a new {@code AutoPopulatingList} that is backed by a standard
      * {@link ArrayList} and creates new elements on demand using the supplied {@link ElementFactory}.
      */
-    public AutoPopulatingList(ElementFactory<Bit> elementFactory) {
+    public AutoPopulatingList(ElementFactory<Bits> elementFactory) {
         this.backingList = new ArrayList<>();
         this.elementFactory = elementFactory;
     }
 
     @Override
-    public void add(int index, Bit element) {
+    public void add(int index, Bits element) {
         this.backingList.add(index, element);
     }
 
     @Override
-    public boolean add(Bit o) {
+    public boolean add(Bits o) {
         return this.backingList.add(o);
     }
 
     @Override
-    public boolean addAll(Collection<? extends Bit> c) {
+    public boolean addAll(Collection<? extends Bits> c) {
         return this.backingList.addAll(c);
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Bit> c) {
+    public boolean addAll(int index, Collection<? extends Bits> c) {
         return this.backingList.addAll(index, c);
     }
 
@@ -62,15 +62,15 @@ public class AutoPopulatingList implements List<Bit> {
     }
 
     @Override
-    public Bit set(int index, Bit element) {
+    public Bits set(int index, Bits element) {
         int backingListSize = this.backingList.size();
         if (index < backingListSize) {
             this.backingList.set(index, element);
         } else {
             for (int x = backingListSize; x < index; x++) {
-                this.backingList.add(Bit.NULL);
+                this.backingList.add(Bits.NULL);
             }
-            element = this.elementFactory.createElement(index, element);
+            element = this.elementFactory.createElement(element);
             this.backingList.add(element);
         }
         return element;
@@ -87,7 +87,7 @@ public class AutoPopulatingList implements List<Bit> {
     }
 
     @Override
-    public Iterator<Bit> iterator() {
+    public Iterator<Bits> iterator() {
         return this.backingList.iterator();
     }
 
@@ -97,17 +97,17 @@ public class AutoPopulatingList implements List<Bit> {
     }
 
     @Override
-    public ListIterator<Bit> listIterator() {
+    public ListIterator<Bits> listIterator() {
         return this.backingList.listIterator();
     }
 
     @Override
-    public ListIterator<Bit> listIterator(int index) {
+    public ListIterator<Bits> listIterator(int index) {
         return this.backingList.listIterator(index);
     }
 
     @Override
-    public Bit remove(int index) {
+    public Bits remove(int index) {
         return this.backingList.remove(index);
     }
 
@@ -132,7 +132,7 @@ public class AutoPopulatingList implements List<Bit> {
     }
 
     @Override
-    public List<Bit> subList(int fromIndex, int toIndex) {
+    public List<Bits> subList(int fromIndex, int toIndex) {
         return this.backingList.subList(fromIndex, toIndex);
     }
 
@@ -160,7 +160,7 @@ public class AutoPopulatingList implements List<Bit> {
     }
 
     @Override
-    public Bit get(int index) {
+    public Bits get(int index) {
         return this.backingList.get(index);
     }
 
@@ -168,16 +168,16 @@ public class AutoPopulatingList implements List<Bit> {
      * Factory interface for creating elements for an index-based access
      * data structure such as a {@link java.util.List}.
      *
-     * @param <Bit> the element type
+     * @param <Bits> the element type
      */
     @FunctionalInterface
-    public interface ElementFactory<Bit> {
+    public interface ElementFactory<Bits> {
 
         /**
          * Create the element for the supplied index.
          *
          * @return the element object
          */
-        Bit createElement(int index, Bit element);
+        Bits createElement(Bits element);
     }
 }

@@ -4,37 +4,43 @@ import com.mzielinski.advent.of.code.utils.AutoPopulatingList;
 import com.mzielinski.advent.of.code.utils.ReadFile;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.util.Objects.requireNonNull;
 
-public class ProgramReader {
+public record ProgramReader() {
 
-    Day14.Memory readFile(String filePath) {
-        Day14.Memory memory = new Day14.Memory(new AutoPopulatingList((index, bit) -> bit));
+    private final static Pattern MASK_PATTERN = Pattern.compile("[X|0-1]{36}");
+    private final static Pattern MEMORY_PATTERN = Pattern.compile("\\d+");
+
+    List<Bits> readFile(String filePath) {
+        List<Bits> memory = new AutoPopulatingList(element -> element);
         InputStream stream = requireNonNull(ReadFile.class.getClassLoader().getResourceAsStream(filePath));
         try (Scanner scanner = new Scanner(stream)) {
             String mask = "";
+            int counter = 0;
             while (scanner.hasNext()) {
-                String next = scanner.next();
-                if (next.startsWith("mask")) {
-                    scanner.next(); // skip =
-                    mask = scanner.next();
-                } else if (next.startsWith("mem")) {
-                    int address = retrieveAddress(next);
-                    scanner.next(); // skip =
-                    Day14.Bit bit = new Day14.Bit(Integer.parseInt(scanner.next()), mask.toCharArray());
-                    memory.memory().set(address, bit);
+                String line = scanner.nextLine();
+                Matcher maskMatcher = MASK_PATTERN.matcher(line);
+                if (maskMatcher.find()) {
+                    mask = maskMatcher.group();
+                } else {
+                    Matcher memoryMatcher = MEMORY_PATTERN.matcher(line);
+                    long address = memoryMatcher.find()
+                            ? Long.parseLong(memoryMatcher.group())
+                            : -1L;
+                    long value = memoryMatcher.find()
+                            ? Long.parseLong(memoryMatcher.group())
+                            : -1L;
+                    Bits bit = new Bits(address, value, mask, counter++);
+                    memory.add(bit);
                 }
             }
         }
         return memory;
-    }
-
-    private int retrieveAddress(String memoryAssigment) {
-        // regex would be better, but I do not have time to fight with regexps :)
-        return Integer.parseInt(memoryAssigment.replaceAll("mem\\[", "")
-                .replaceAll("]", ""));
     }
 
 }
