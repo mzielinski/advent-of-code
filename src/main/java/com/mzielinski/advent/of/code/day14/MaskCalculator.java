@@ -12,7 +12,7 @@ public final class MaskCalculator {
 
     private static Bits recalculateMask(Bits b) {
         char[] bits = Bits.convertTo36bit(Bits.convertToBinaryString(b.address));
-        String newMask = b.reduce(bits, b.mask, (mask, bit) -> mask == '0' ? bit : mask);
+        String newMask = b.applyMask(bits, b.mask, (mask, bit) -> mask == '0' ? bit : mask);
         return new Bits(b.address, b.value, newMask, b.index);
     }
 

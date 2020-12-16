@@ -28,11 +28,11 @@ public class Bits {
 
     Bits applyMask() {
         char[] bits = convertTo36bit(convertToBinaryString(value));
-        String binaryString = reduce(bits, mask, (mask, bit) -> List.of('0', '1').contains(mask) ? mask : bit);
+        String binaryString = applyMask(bits, mask, (mask, bit) -> List.of('0', '1').contains(mask) ? mask : bit);
         return new Bits(address, convertToLong(binaryString), mask, index);
     }
 
-    String reduce(char[] bits, char[] mask, BiFunction<Character, Character, Character> mapper) {
+    String applyMask(char[] bits, char[] mask, BiFunction<Character, Character, Character> mapper) {
         return IntStream.range(0, mask.length)
                 .map(i -> mapper.apply(mask[i], bits[i]))
                 .mapToObj(i -> (char) i)
