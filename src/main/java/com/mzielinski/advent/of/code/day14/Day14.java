@@ -19,15 +19,14 @@ public record Day14() {
         }
 
         private long sumValues(boolean applyMask) {
-            // sort reversed by index
-            memory.sort(Comparator.<Bits>comparingInt(o -> o.index).reversed());
-
             // remove duplicated addresses (leave the last occurrence)
-            Set<Bits> filtered = memory.stream().collect(Collectors.toUnmodifiableSet());
+            Set<Bits> filtered = memory.stream()
+                    .sorted(Comparator.<Bits>comparingInt(o -> o.index).reversed())
+                    .collect(Collectors.toUnmodifiableSet());
 
             // calculate sum from values which left
             return filtered.stream()
-                    .filter(bits -> bits.value >= 0)
+                    .filter(bits -> bits.index >= 0)
                     .map(bits -> applyMask ? bits.applyMask() : bits)
                     .map(Bits::value)
                     .reduce(Long::sum)
