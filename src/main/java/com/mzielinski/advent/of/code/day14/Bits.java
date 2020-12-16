@@ -2,6 +2,7 @@ package com.mzielinski.advent.of.code.day14;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
@@ -61,6 +62,19 @@ public class Bits {
 
     static String defaultMask() {
         return IntStream.range(0, 36).mapToObj(i -> "X").reduce("", String::concat);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bits bits = (Bits) o;
+        return address == bits.address;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(address);
     }
 
     @Override

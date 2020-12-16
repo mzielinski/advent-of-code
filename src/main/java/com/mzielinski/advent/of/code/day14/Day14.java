@@ -1,6 +1,9 @@
 package com.mzielinski.advent.of.code.day14;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public record Day14() {
 
@@ -16,25 +19,19 @@ public record Day14() {
         }
 
         private long sumValues(boolean applyMask) {
+            // sort reversed by index
             memory.sort(Comparator.<Bits>comparingInt(o -> o.index).reversed());
-            return filterDuplicatedByIndex().stream()
-                    .filter(bits -> bits.index >= 0)
+
+            // remove duplicated addresses (leave the last occurrence)
+            Set<Bits> filtered = memory.stream().collect(Collectors.toUnmodifiableSet());
+
+            // calculate sum from values which left
+            return filtered.stream()
+                    .filter(bits -> bits.value >= 0)
                     .map(bits -> applyMask ? bits.applyMask() : bits)
                     .map(Bits::value)
                     .reduce(Long::sum)
                     .orElse(0L);
-        }
-
-        private List<Bits> filterDuplicatedByIndex() {
-            List<Bits> filtered = new ArrayList<>();
-            Set<Long> alreadyUsedAddresses = new HashSet<>();
-            memory.forEach(bits -> {
-                if (!alreadyUsedAddresses.contains(bits.address)) {
-                    filtered.add(bits);
-                    alreadyUsedAddresses.add(bits.address);
-                }
-            });
-            return filtered;
         }
     }
 
