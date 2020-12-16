@@ -21,7 +21,6 @@ public final class MaskCalculator {
                 .filter(bits -> bits.index >= 0)
                 .sorted(Comparator.comparingInt(o -> o.index))
                 .map(MaskCalculator::recalculateMask)
-                .map(MaskCalculator::recalculateMask)
                 .flatMap(this::convertPermutationsIntoAddresses)
                 .collect(toList());
     }
