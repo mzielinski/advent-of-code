@@ -73,6 +73,7 @@ public class TicketConverter {
         return insertColumnIndexesToRules(reversedRules);
     }
 
+    // List<List<List<Rule>>> → lol
     private List<List<List<Rule>>> covertTicketToMatrixOfRules(List<Ticket> validTickets) {
         List<List<List<Rule>>> validRules = new ArrayList<>();
         for (Ticket ticket : validTickets) {

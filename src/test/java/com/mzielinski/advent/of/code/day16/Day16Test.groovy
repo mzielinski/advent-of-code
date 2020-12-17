@@ -16,7 +16,7 @@ class Day16Test extends Specification {
         'day16/02.txt' || 30869
     }
 
-    def 'should find out number position for each element in your ticket #ticket'() {
+    def 'should return #result during multiplying each element in my ticket #ticket'() {
         expect:
         new Day16().multiplyValuesFromMyTickets(ticket, Pattern.compile(pattern)) == result
 
