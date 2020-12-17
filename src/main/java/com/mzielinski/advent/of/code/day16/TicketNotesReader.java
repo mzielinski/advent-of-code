@@ -3,23 +3,22 @@ package com.mzielinski.advent.of.code.day16;
 import com.mzielinski.advent.of.code.utils.ReadFile;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 public class TicketNotesReader {
 
-    record TicketRule(int from, int to) {
-        public boolean match(int value) {
+    record TicketRule(long from, long to) {
+
+        public boolean match(long value) {
             return value >= from && value <= to;
         }
     }
 
-    record TicketRules(String name, List<TicketRule> patters) {
+    record TicketRules(String name, List<TicketRule> rules) {
         static TicketRules of(String name, String[] patterns) {
             return new TicketRules(name, Arrays.stream(patterns)
                     .map(String::trim)
@@ -27,41 +26,83 @@ public class TicketNotesReader {
                     .map(rule -> new TicketRule(Integer.parseInt(rule[0]), Integer.parseInt(rule[1])))
                     .collect(toList()));
         }
+    }
 
-        boolean anyRuleMatch(int value) {
-            return patters.stream().anyMatch(rule -> rule.match(value));
+    record RuleValidation(TicketRules parent, TicketRule rule, boolean valid) {
+    }
+
+    record TicketNumber(long number, Set<RuleValidation> validations, List<TicketRules> validRules) {
+
+        public void addValidations(TicketRules rules) {
+            Set<RuleValidation> newValidationRules = rules.rules().stream()
+                    .map(rule -> new RuleValidation(rules, rule, rule.match(number)))
+                    .collect(toSet());
+            newValidationRules.stream()
+                    .filter(RuleValidation::valid)
+                    .forEach(validation -> validRules.add(validation.parent()));
+            validations.addAll(newValidationRules);
+        }
+
+        boolean isValidNumber() {
+            return validations().stream().anyMatch(RuleValidation::valid);
+        }
+
+        boolean isInvalidNumber() {
+            return validations().stream().noneMatch(RuleValidation::valid);
+        }
+
+        public List<TicketRules> validRules() {
+            return validations().stream()
+                    .filter(RuleValidation::valid)
+                    .map(RuleValidation::parent)
+                    .collect(toList());
         }
     }
 
-    record Ticket(List<Integer> numbers, List<Integer> invalidNumbers) {
-        static Ticket of(String numbers) {
-            return new Ticket(
-                    Arrays.stream(numbers.split(","))
-                            .map(String::trim)
-                            .map(Integer::parseInt)
-                            .collect(toList()), new ArrayList<>());
+    record Ticket(List<TicketNumber> numbers) {
+
+        private final static Ticket NONE = Ticket.of("");
+
+        static Ticket of(String numbersAsString) {
+            final List<TicketNumber> numbers = Arrays.stream(numbersAsString.split(","))
+                    .map(String::trim)
+                    .filter(number -> !number.equals(""))
+                    .map(Integer::parseInt)
+                    .map(number -> new TicketNumber(number, new HashSet<>(), new ArrayList<>()))
+                    .collect(toList());
+            return new Ticket(numbers);
         }
 
-        public Ticket findInvalidNumber(List<TicketRules> rules) {
-            return this.numbers().stream()
-                    .filter(number -> rules.stream().noneMatch(rule -> rule.anyRuleMatch(number)))
-                    .reduce(this, Ticket::invalidNumber, ($1, $2) -> null);
+        private Ticket addValidations(List<TicketRules> rules) {
+            List<TicketNumber> numberWithValidation = numbers().stream()
+                    .peek(number -> rules.forEach(number::addValidations))
+                    .collect(toList());
+            return new Ticket(numberWithValidation);
         }
 
-        private Ticket invalidNumber(Integer number) {
-            invalidNumbers.add(number);
-            return this;
+        public boolean isInvalidTicket() {
+            return numbers().stream().anyMatch(TicketNumber::isInvalidNumber);
+        }
+
+        public boolean isValidTicket() {
+            return numbers().stream().allMatch(TicketNumber::isValidNumber);
         }
     }
 
     record TicketNotes(Ticket myTicket, List<Ticket> nearbyTickets, List<TicketRules> ticketRules) {
 
+        static TicketNotes of(Ticket myTicket, List<Ticket> nearbyTickets, List<TicketRules> ticketRules) {
+            return new TicketNotes(
+                    myTicket.addValidations(ticketRules),
+                    nearbyTickets.stream().map(rule -> rule.addValidations(ticketRules)).collect(toList()),
+                    ticketRules);
+        }
+
     }
 
     TicketNotes readFile(String filePath) {
         InputStream stream = requireNonNull(ReadFile.class.getClassLoader().getResourceAsStream(filePath));
-
-        Ticket myTicket = null;
+        Ticket myTicket = Ticket.NONE;
         List<Ticket> nearbyTickets = new ArrayList<>();
         List<TicketRules> ticketRules = new ArrayList<>();
         try (Scanner scanner = new Scanner(stream)) {
@@ -80,6 +121,6 @@ public class TicketNotesReader {
                 }
             }
         }
-        return new TicketNotes(myTicket, nearbyTickets, ticketRules);
+        return TicketNotes.of(myTicket, nearbyTickets, ticketRules);
     }
 }
