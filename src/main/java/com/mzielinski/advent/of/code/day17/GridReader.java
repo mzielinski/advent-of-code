@@ -7,15 +7,14 @@ import com.mzielinski.advent.of.code.utils.ReadFile;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CubeReader<T extends Point<T>> implements ReadFile<List<T>> {
-
-    private int yIndex = 0;
-
-    public CubeReader(PointFactory<T> pointFactory) {
-        this.pointFactory = pointFactory;
-    }
+public class GridReader<T extends Point<T>> implements ReadFile<List<T>> {
 
     private final PointFactory<T> pointFactory;
+    private int yIndex = 0;
+
+    public GridReader(PointFactory<T> pointFactory) {
+        this.pointFactory = pointFactory;
+    }
 
     @Override
     public void cleanup() {

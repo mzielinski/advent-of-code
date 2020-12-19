@@ -18,28 +18,28 @@ import static java.util.stream.Collectors.toSet;
 public class Day17<T extends Point<T>> {
 
     // part 1
-    public static CubeReader<Point3D> point3DCubeReader = new CubeReader<>((z, y, x, w) -> new Point3D(z, y, x));
+    public static GridReader<Point3D> point3DGridReader = new GridReader<>((z, y, x, w) -> new Point3D(z, y, x));
     public static NeighboursGenerator<Point3D> point3DNeighboursGenerator = new Point3DNeighboursGenerator();
 
     // part 2
-    public static CubeReader<Point4D> point4DCubeReader = new CubeReader<>(Point4D::new);
+    public static GridReader<Point4D> point4DGridReader = new GridReader<>(Point4D::new);
     public static NeighboursGenerator<Point4D> point4DNeighboursGenerator = new Point4DNeighboursGenerator();
 
     private final List<T> combinations;
-    private final CubeReader<T> cubeReader;
+    private final GridReader<T> gridReader;
 
-    public Day17(NeighboursGenerator<T> neighboursGenerator, CubeReader<T> cubeReader) {
+    public Day17(NeighboursGenerator<T> neighboursGenerator, GridReader<T> gridReader) {
         this.combinations = neighboursGenerator.combinations();
-        this.cubeReader = cubeReader;
+        this.gridReader = gridReader;
     }
 
     public long countActivePieces(String filePath, int cycle) {
-        Grid<T> grid = Grid.initializeCube(filePath, cubeReader);
+        Grid<T> grid = Grid.initializeGrid(filePath, gridReader);
         return preformRound(grid, cycle).calculateActive();
     }
 
-    public Grid<T> preformRound(Grid<T> cube, int cycle) {
-        Grid<T> round = performSingleRound(cube);
+    public Grid<T> preformRound(Grid<T> grid, int cycle) {
+        Grid<T> round = performSingleRound(grid);
         return cycle > 1 ? preformRound(round, cycle - 1) : round;
     }
 

@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 public record Grid<T>(Set<Point<T>> activePoints) {
 
-    public static <T extends Point<T>> Grid<T> initializeCube(String filePath, CubeReader<T> cubeReader) {
-        return new Grid<>(cubeReader
+    public static <T extends Point<T>> Grid<T> initializeGrid(String filePath, GridReader<T> gridReader) {
+        return new Grid<>(gridReader
                 .readFile(filePath)
                 .stream()
                 .flatMap(Collection::stream)

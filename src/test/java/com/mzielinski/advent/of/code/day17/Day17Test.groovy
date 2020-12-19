@@ -6,9 +6,9 @@ import spock.lang.Unroll
 
 class Day17Test extends Specification {
 
-    def 'should verify that initial cube is created properly'() {
+    def 'should verify that initial grid is created properly'() {
         given:
-        Grid grid = Grid.initializeCube('day17/01.txt', Day17.point3DCubeReader)
+        Grid grid = Grid.initializeGrid('day17/01.txt', Day17.point3DGridReader)
 
         expect:
         grid.activePoints().contains(new Point3D(0, 0, 1))
@@ -21,12 +21,12 @@ class Day17Test extends Specification {
         grid.activePoints().size() == 5
     }
 
-    def 'should verify that cube is changed properly to next stage for single round in 03.txt'() {
+    def 'should verify that grid is changed properly to next stage for single round in 03.txt'() {
         given:
-        Grid grid = Grid.initializeCube('day17/03.txt', Day17.point3DCubeReader)
+        Grid grid = Grid.initializeGrid('day17/03.txt', Day17.point3DGridReader)
 
         when:
-        def round = new Day17(Day17.point3DNeighboursGenerator, Day17.point3DCubeReader).performSingleRound(grid)
+        def round = new Day17(Day17.point3DNeighboursGenerator, Day17.point3DGridReader).performSingleRound(grid)
 
         then:
         grid.activePoints().size() == 3
@@ -37,12 +37,12 @@ class Day17Test extends Specification {
         round.activePoints().contains(new Point3D(1, 1, 1))
     }
 
-    def 'should verify that cube is changed properly to next stage for single round in 01.txt'() {
+    def 'should verify that grid is changed properly to next stage for single round in 01.txt'() {
         given:
-        Grid grid = Grid.initializeCube('day17/01.txt', Day17.point3DCubeReader)
+        Grid grid = Grid.initializeGrid('day17/01.txt', Day17.point3DGridReader)
 
         when:
-        def round = new Day17(Day17.point3DNeighboursGenerator, Day17.point3DCubeReader).performSingleRound(grid)
+        def round = new Day17(Day17.point3DNeighboursGenerator, Day17.point3DGridReader).performSingleRound(grid)
 
         then:
         round.activePoints().size() == 11
@@ -69,13 +69,13 @@ class Day17Test extends Specification {
     @Unroll
     def 'should find #result active pieces for #filePath after #cycle boot process'() {
         expect:
-        new Day17(generator, cubeReader).countActivePieces(filePath, cycle) == result
+        new Day17(generator, gridReader).countActivePieces(filePath, cycle) == result
 
         where:
-        generator                        | cubeReader              | filePath       | cycle || result
-        Day17.point3DNeighboursGenerator | Day17.point3DCubeReader | 'day17/01.txt' | 6     || 112
-        Day17.point3DNeighboursGenerator | Day17.point3DCubeReader | 'day17/02.txt' | 6     || 315
-        Day17.point4DNeighboursGenerator | Day17.point4DCubeReader | 'day17/01.txt' | 6     || 848
-        Day17.point4DNeighboursGenerator | Day17.point4DCubeReader | 'day17/02.txt' | 6     || 1520
+        generator                        | gridReader              | filePath       | cycle || result
+        Day17.point3DNeighboursGenerator | Day17.point3DGridReader | 'day17/01.txt' | 6     || 112
+        Day17.point3DNeighboursGenerator | Day17.point3DGridReader | 'day17/02.txt' | 6     || 315
+        Day17.point4DNeighboursGenerator | Day17.point4DGridReader | 'day17/01.txt' | 6     || 848
+        Day17.point4DNeighboursGenerator | Day17.point4DGridReader | 'day17/02.txt' | 6     || 1520
     }
 }
