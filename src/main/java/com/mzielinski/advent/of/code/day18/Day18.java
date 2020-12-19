@@ -13,8 +13,8 @@ public record Day18(List<Long> results) {
         @Override
         String calculateEquationWithoutParentheses(String equationAsString) {
             List<String> equation = convertToList(equationAsString);
-            String equationWithoutAddition = resolveOperation(() -> List.of("+"), equation);
-            return resolveOperation(() -> List.of("*"), convertToList(equationWithoutAddition));
+            String equationWithoutAdditions = resolveOperation(() -> List.of("+"), equation);
+            return resolveOperation(() -> List.of("*"), convertToList(equationWithoutAdditions));
         }
 
         @Override
@@ -28,9 +28,7 @@ public record Day18(List<Long> results) {
         public long calculate(String equation) {
             String result = equation;
             while (!result.matches("^\\d+$")) {
-                result = result.contains("(")
-                        ? calculatesSingleParentheses(result)
-                        : calculateEquationWithoutParentheses(result);
+                result = calculateEquation(result);
             }
             return Long.parseLong(result);
         }
@@ -65,7 +63,7 @@ public record Day18(List<Long> results) {
             return String.join(" ", equation);
         }
 
-        private String calculatesSingleParentheses(String equation) {
+        private String calculateEquation(String equation) {
             if (equation.contains("(")) {
                 int startIndex = equation.lastIndexOf("(");
                 String temp = equation.substring(startIndex);
@@ -74,7 +72,7 @@ public record Day18(List<Long> results) {
                 String result = calculateEquationWithoutParentheses(equationWithoutParentheses);
                 return equation.substring(0, startIndex) + result + temp.substring(endIndex + 1);
             }
-            return equation;
+            return calculateEquationWithoutParentheses(equation);
         }
 
         static List<String> convertToList(String equation) {
