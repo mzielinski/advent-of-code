@@ -1,16 +1,17 @@
-package com.mzielinski.advent.of.code.day17;
+package com.mzielinski.advent.of.code.day17.geometry.d3;
 
+import com.mzielinski.advent.of.code.day17.geometry.NeighboursGenerator;
 import org.paukov.combinatorics3.Generator;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class GridMoveStrategy {
+public class Point3DNeighboursGenerator implements NeighboursGenerator<Point3D> {
 
     private final List<Point3D> combinations;
 
-    private GridMoveStrategy() {
+    public Point3DNeighboursGenerator() {
         this.combinations = Generator.permutation(-1, 0, 1)
                 .withRepetitions(3)
                 .stream()
@@ -18,8 +19,9 @@ public class GridMoveStrategy {
                 .collect(toList());
     }
 
-    public static List<Point3D> combinations() {
-        return new GridMoveStrategy().combinations;
+    @Override
+    public List<Point3D> combinations() {
+        return new Point3DNeighboursGenerator().combinations;
     }
 
     @Override
