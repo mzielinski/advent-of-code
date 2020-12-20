@@ -10,19 +10,16 @@ import static java.util.Objects.requireNonNull;
 public interface ReadFile<T> {
 
     default List<T> readFile(String filePath) {
-        cleanup();
+        int lineNumber = 0;
         List<T> records = new ArrayList<>();
         InputStream stream = requireNonNull(ReadFile.class.getClassLoader().getResourceAsStream(filePath));
         try (Scanner scanner = new Scanner(stream)) {
             while (scanner.hasNextLine()) {
-                records.add(getRecordFromLine(scanner.nextLine()));
+                records.add(getRecordFromLine(scanner.nextLine(), lineNumber++));
             }
         }
         return records;
     }
 
-    T getRecordFromLine(String nextLine);
-
-    default void cleanup() {
-    }
+    T getRecordFromLine(String nextLine, int lineNumber);
 }

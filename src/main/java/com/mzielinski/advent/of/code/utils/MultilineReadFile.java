@@ -16,15 +16,16 @@ public interface MultilineReadFile<T> extends ReadFile<T> {
         InputStream stream = requireNonNull(MultilineReadFile.class.getClassLoader().getResourceAsStream(filePath));
         try (Scanner scanner = new Scanner(stream)) {
             StringBuilder next = new StringBuilder();
+            int index = 0;
             while (scanner.hasNextLine()) {
                 String currentLine = scanner.nextLine();
                 if (!scanner.hasNextLine()) {
                     // last line
                     next.append(currentLine).append(DELIMITER);
-                    records.add(getRecordFromLine(next.toString()));
+                    records.add(getRecordFromLine(next.toString(), index++));
                 } else if ("".equals(currentLine)) {
                     // line between passports
-                    records.add(getRecordFromLine(next.toString()));
+                    records.add(getRecordFromLine(next.toString(), index));
                     next = new StringBuilder();
                 } else {
                     // line inside single passport
@@ -35,5 +36,5 @@ public interface MultilineReadFile<T> extends ReadFile<T> {
         return records;
     }
 
-    T getRecordFromLine(String nextLine);
+    T getRecordFromLine(String nextLine, int lineNumber);
 }

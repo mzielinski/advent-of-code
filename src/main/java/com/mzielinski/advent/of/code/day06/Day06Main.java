@@ -60,7 +60,7 @@ public class Day06Main {
     static class Day06Input implements MultilineReadFile<Group> {
 
         @Override
-        public Group getRecordFromLine(String line) {
+        public Group getRecordFromLine(String line, int lineNumber) {
             Group group = new Group();
             List<User> users = Arrays.stream(line.split(DELIMITER))
                     .map(userAnswers -> {
