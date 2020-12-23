@@ -24,7 +24,7 @@ public record Day14() {
                     .sorted(Comparator.<Bits>comparingInt(o -> o.index).reversed())
                     .collect(Collectors.toUnmodifiableSet());
 
-            // calculate sum from values which left
+            // calculate sum from patterns which left
             return filtered.stream()
                     .filter(bits -> bits.index >= 0)
                     .map(bits -> applyMask ? bits.applyMask() : bits)
