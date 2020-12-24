@@ -9,7 +9,13 @@ import static java.util.Objects.requireNonNull;
 
 public interface MultilineReadFile<T> extends ReadFile<T> {
 
-    String DELIMITER = ";";
+    default String delimiter() {
+        return ";";
+    }
+
+    default boolean isNextLine(String line) {
+        return "".equals(line);
+    }
 
     default List<T> readFile(String filePath) {
         List<T> records = new ArrayList<>();
@@ -21,20 +27,20 @@ public interface MultilineReadFile<T> extends ReadFile<T> {
                 String currentLine = scanner.nextLine();
                 if (!scanner.hasNextLine()) {
                     // last line
-                    next.append(currentLine).append(DELIMITER);
-                    records.add(getRecordFromLine(next.toString(), index++));
-                } else if ("".equals(currentLine)) {
+                    next.append(currentLine).append(delimiter());
+                    records.add(getRecordMultiLines(next.toString(), index++));
+                } else if (isNextLine(currentLine)) {
                     // line between passports
-                    records.add(getRecordFromLine(next.toString(), index));
+                    records.add(getRecordMultiLines(next.toString(), index));
                     next = new StringBuilder();
                 } else {
                     // line inside single passport
-                    next.append(currentLine).append(DELIMITER);
+                    next.append(currentLine).append(delimiter());
                 }
             }
         }
         return records;
     }
 
-    T getRecordFromLine(String nextLine, int lineNumber);
+    T getRecordMultiLines(String nextLine, int lineNumber);
 }

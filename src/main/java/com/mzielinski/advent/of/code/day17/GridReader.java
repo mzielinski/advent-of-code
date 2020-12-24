@@ -10,7 +10,7 @@ import java.util.List;
 public record GridReader<T extends Point<T>>(PointFactory<T> pointFactory) implements ReadFile<List<T>> {
 
     @Override
-    public List<T> getRecordFromLine(String nextLine, int lineNumber) {
+    public List<T> getRecordMultiLines(String nextLine, int lineNumber) {
         List<T> activePoints = new ArrayList<>();
         int xIndex = 0;
         for (char c : nextLine.toCharArray()) {

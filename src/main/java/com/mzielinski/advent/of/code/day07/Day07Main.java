@@ -39,7 +39,7 @@ public class Day07Main {
     static class Day07Input implements ReadFile<Rule> {
 
         @Override
-        public Rule getRecordFromLine(String line, int lineNumber) {
+        public Rule getRecordMultiLines(String line, int lineNumber) {
             String[] split = line.split("contain");
             Rule rule = new Rule(split[0]);
             for (String bag : split[1].split(",")) {

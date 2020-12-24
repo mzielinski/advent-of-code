@@ -67,7 +67,7 @@ public class Day05Main {
     static class Day05Input implements ReadFile<Seat> {
 
         @Override
-        public Seat getRecordFromLine(String line, int lineNumber) {
+        public Seat getRecordMultiLines(String line, int lineNumber) {
             Seat seat = new Seat();
             char[] chars = line.toCharArray();
             if (chars.length != 10) {

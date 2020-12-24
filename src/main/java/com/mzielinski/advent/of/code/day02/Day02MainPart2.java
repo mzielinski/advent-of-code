@@ -10,7 +10,7 @@ public class Day02MainPart2 {
     static class Day02MainPart2Input implements ReadFile<Input> {
 
         @Override
-        public Input getRecordFromLine(String line, int lineNumber) {
+        public Input getRecordMultiLines(String line, int lineNumber) {
             Input input = new Input();
             try (Scanner rowScanner = new Scanner(line)) {
                 rowScanner.useDelimiter(" ");

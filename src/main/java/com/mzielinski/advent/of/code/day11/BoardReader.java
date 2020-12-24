@@ -9,7 +9,7 @@ import java.util.List;
 public class BoardReader implements ReadFile<List<Piece>> {
 
     @Override
-    public List<Piece> getRecordFromLine(String nextLine, int lineNumber) {
+    public List<Piece> getRecordMultiLines(String nextLine, int lineNumber) {
         List<Piece> board = new ArrayList<>();
         for (char c : nextLine.toCharArray()) {
             board.add(Piece.valueOf(c));
