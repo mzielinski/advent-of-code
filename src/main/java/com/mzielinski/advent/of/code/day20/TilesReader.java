@@ -3,7 +3,6 @@ package com.mzielinski.advent.of.code.day20;
 import com.mzielinski.advent.of.code.utils.MultilineReadFile;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -36,7 +35,7 @@ class TilesReader implements MultilineReadFile<Tile> {
                 .mapToObj(y -> {
                     char[] row = tileRows.get(y).toCharArray();
                     return IntStream.range(0, row.length)
-                            .mapToObj(x -> new Point(x, y, row[x]));
+                            .mapToObj(x -> new Point(y, x, row[x]));
                 })
                 .flatMap(Function.identity())
                 .collect(toList());
