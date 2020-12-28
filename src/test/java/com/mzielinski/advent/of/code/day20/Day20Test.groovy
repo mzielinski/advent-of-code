@@ -20,7 +20,7 @@ class Day20Test extends Specification {
         def result = this.class.classLoader.getResource(expectedImage).toURI()
 
         expect:
-        Day20.buildImage(filePath).toString() == new File(result).text
+        Day20.buildImage(filePath) as String == new File(result).text
 
         where:
         filePath       || expectedImage
@@ -33,17 +33,17 @@ class Day20Test extends Specification {
         def result = this.class.classLoader.getResource(expectedImage).toURI()
 
         when:
-        def borders = Day20.convertToImageWithoutBorders(filePath)
+        def tile = Day20.convertToImageWithoutBorders(filePath)
 
         then:
-        borders.toString() == new File(result).text
-        borders.xMax() == x
-        borders.yMax() == y
+        tile as String == new File(result).text
+        tile.xMax() == expectedXMax
+        tile.yMax() == expectedYMax
 
         where:
-        filePath       || expectedImage                        | x  | y
-        'day20/01.txt' || 'day20/01-image-without-borders.txt' | 23 | 23
-        'day20/02.txt' || 'day20/02-image-without-borders.txt' | 95 | 95
+        filePath       || expectedImage                        | expectedXMax | expectedYMax
+        'day20/01.txt' || 'day20/01-image-without-borders.txt' | 23           | 23
+        'day20/02.txt' || 'day20/02-image-without-borders.txt' | 95           | 95
     }
 
     def 'should value for part2 $filePath'() {
