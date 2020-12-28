@@ -1,5 +1,7 @@
 package com.mzielinski.advent.of.code.day20;
 
+import java.util.List;
+
 import static com.mzielinski.advent.of.code.day20.Tile.MONSTER_CORDS;
 
 public class Day20 {
@@ -22,8 +24,8 @@ public class Day20 {
     }
 
     public static Tile convertToImageWithoutBorders(String filePath) {
-        Image image = new Image(new TilesReader().readFile(filePath)).createImage();
-        return new ImageConverter(image.sortedTiles()).convertToTile(false);
+        List<TileWithPosition> sortedTiles = buildImage(filePath).sortedTiles();
+        return new ImageConverter(sortedTiles).convertToTile(false);
     }
 
     public static Image buildImage(String filePath) {
