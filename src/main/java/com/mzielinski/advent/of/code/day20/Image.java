@@ -48,7 +48,7 @@ record Image(List<Tile> tiles, List<TileWithPosition> sortedTiles) {
                                 lastNeighbours.clear();
                                 lastNeighbours.addAll(neighbours.keySet());
 
-                                printMap(image.values());
+                                printImage(image.values());
                             }
                     );
         }
@@ -101,7 +101,7 @@ record Image(List<Tile> tiles, List<TileWithPosition> sortedTiles) {
                 .orElseThrow(() -> new IllegalArgumentException("Cannot find tile with id " + tileId));
     }
 
-    private void printMap(Collection<TileWithPosition> tiles) {
+    private void printImage(Collection<TileWithPosition> tiles) {
         System.out.println("Current image...");
         int yMin = findMin(tiles, Position::y);
         int xMin = findMin(tiles, Position::x);

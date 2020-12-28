@@ -3,9 +3,7 @@ package com.mzielinski.advent.of.code.day20;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
-import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 record Neighbour(int id, DirectionWithReversed direction) {
