@@ -1,31 +1,28 @@
 package com.mzielinski.advent.of.code.day19
 
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
 class Day19Test extends Specification {
 
-    public static final Map<String, Set<List<String>>> DEFAULT_RULES = [
-            '0': Set.of(['4', '1', '5']),
-            '1': Set.of(['2', '3'], ['3', '2']),
-            '2': Set.of(['4', '4'], ['5', '5']),
-            '3': Set.of(['4', '5'], ['5', '4']),
-            '4': Set.of(['a']),
-            '5': Set.of(['b'])
-    ]
+    public static final def DEFAULT_RULES = new Day19.RulesDefinition([
+            '0': ['4,1,5'],
+            '1': ['2,3', '3,2'],
+            '2': ['4,4', '5,5'],
+            '3': ['4,5', '5,4'],
+            '4': ['a'],
+            '5': ['b']])
 
-    @Ignore('Not working... in progress')
     @Unroll
     def 'should check message #message against provided rules'() {
         given:
-        def day19 = new Day19(DEFAULT_RULES)
+        def resolver = new RulesResolver(DEFAULT_RULES)
 
         when:
-        Day19.Rules rules = day19.convertToRules()
+        Day19.Rules rules = resolver.convertToRules()
 
         then:
-        day19.matchAgainstRules(message, rules.rules().get('0')) == result
+        new Day19(rules).matchAgainstRules(message) == result
 
         where:
         message   || result
@@ -36,4 +33,29 @@ class Day19Test extends Specification {
         'aaaabbb' || false
     }
 
+    @Unroll
+    def 'should read init file #filePath'() {
+        expect:
+        RulesReader.parseRules(filePath) == expectedResult
+
+        where:
+        filePath       || expectedResult
+        'day19/01.txt' || DEFAULT_RULES
+    }
+
+    def 'should calculate how many messages are valid for main rule'() {
+        given:
+        def rulesDefinitions = RulesReader.parseRules(filePath)
+        def messages = MessagesReader.parseMessages(filePath)
+        def max = messages.collect { it.length() }.max()
+        def rules = new RulesResolver(rulesDefinitions).convertToRules(max * 2 - 1)
+
+        expect:
+        new Day19(rules).calculateValidMessages(messages) == expectedResult
+
+        where:
+        filePath       || expectedResult
+        'day19/01.txt' || 2
+//        'day19/02.txt' || 102
+    }
 }

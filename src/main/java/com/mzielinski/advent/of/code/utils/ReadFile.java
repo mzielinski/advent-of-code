@@ -15,7 +15,10 @@ public interface ReadFile<T> {
         InputStream stream = requireNonNull(ReadFile.class.getClassLoader().getResourceAsStream(filePath));
         try (Scanner scanner = new Scanner(stream)) {
             while (scanner.hasNextLine()) {
-                records.add(getRecordMultiLines(scanner.nextLine(), lineNumber++));
+                T recordMultiLines = getRecordMultiLines(scanner.nextLine(), lineNumber++);
+                if (recordMultiLines != null) {
+                    records.add(recordMultiLines);
+                }
             }
         }
         return records;

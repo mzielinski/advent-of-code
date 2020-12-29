@@ -1,59 +1,47 @@
 package com.mzielinski.advent.of.code.day19;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import com.mzielinski.advent.of.code.utils.StringUtils;
 
-public record Day19(Map<String, Set<List<String>>> input) {
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
-    record Rule(Set<String> patterns) {
-    }
+public record Day19(Rules rules) {
 
-    record Rules(Map<String, Rule> rules) {
-    }
+    record RulesDefinition(Map<String, List<String>> rules) {
 
-    public Rules convertToRules() {
-        Map<String, Rule> rules = input.entrySet()
-                .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, entry -> {
-                    List<Set<List<String>>> cache = new ArrayList<>();
-                    cache.add(entry.getValue());
-                    return buildRule(cache);
-                }));
-        return new Rules(rules);
-    }
-
-    private Rule buildRule(List<Set<List<String>>> cache) {
-        List<Set<List<String>>> temp = new ArrayList<>();
-        for (Set<List<String>> rule : cache) {
-            if (allLetters(rule)) {
-                temp.add(rule);
-            } else {
-                for (List<String> partOfRule : rule) {
-                    for (String s : partOfRule) {
-                        temp.add(input.get(s));
-                    }
-                }
-            }
+        public String mainRule(String mainRule) {
+            return Optional.ofNullable(rules.get(mainRule))
+                    .filter(rules -> rules.size() == 1)
+                    .map(rule -> rule.get(0))
+                    .orElseThrow(() -> new IllegalArgumentException("Cannot find main rule " + mainRule));
         }
-        if (!allLetters(temp)) buildRule(temp);
-        System.out.println(cache);
-        return new Rule(null);
     }
 
-    private boolean allLetters(Set<List<String>> cache) {
-        return cache.stream()
-                .flatMap(Collection::stream)
-                .allMatch(value -> value.matches("^[a|b]$"));
+    record Rules(Set<String> patterns) {
+
+        public boolean match(String message) {
+            return patterns().stream().anyMatch(message::matches);
+        }
     }
 
-    private boolean allLetters(List<Set<List<String>>> cache) {
-        return cache.stream()
-                .flatMap(Collection::stream)
-                .flatMap(Collection::stream)
-                .allMatch(value -> value.matches("^[a|b]$"));
+    record Replacement(String parentRule, String subRule) {
+
+        public String replace(String rule) {
+            return StringUtils.replace(rule, parentRule, subRule);
+        }
     }
 
-    public boolean matchAgainstRules(String message, Rule rule) {
-        return rule.patterns().contains(message);
+    public int calculateValidMessages(List<String> messages) {
+        return messages.stream()
+                .filter(this::matchAgainstRules)
+                .mapToInt(valid -> 1)
+                .reduce(Integer::sum)
+                .orElse(0);
+    }
+
+    public boolean matchAgainstRules(String message) {
+        return rules().match(message);
     }
 }
