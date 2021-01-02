@@ -165,7 +165,7 @@ public class AutoPopulatingList implements List<Bits> {
     }
 
     /**
-     * Factory interface for creating elements for an index-based access
+     * Factory interface for creating elements for an player-based access
      * data structure such as a {@link java.util.List}.
      *
      * @param <Bits> the element type
@@ -174,7 +174,7 @@ public class AutoPopulatingList implements List<Bits> {
     public interface ElementFactory<Bits> {
 
         /**
-         * Create the element for the supplied index.
+         * Create the element for the supplied player.
          *
          * @return the element object
          */

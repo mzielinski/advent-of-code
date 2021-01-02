@@ -64,7 +64,7 @@ public class Board {
         return Optional.of(board)
                 .map(rows -> rows.get(row))
                 .map(columns -> columns.get(column))
-                .orElseThrow(() -> new IllegalStateException("Piece in row " + row + " and index " + column + " cannot be found"));
+                .orElseThrow(() -> new IllegalStateException("Piece in row " + row + " and player " + column + " cannot be found"));
     }
 
     public long calculateNumberOfOccupiedSeats() {

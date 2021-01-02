@@ -4,7 +4,7 @@ package com.mzielinski.advent.of.code.day17.geometry;
 public interface PointFactory<T extends Point<T>> {
 
     /**
-     * Create the element for the supplied index.
+     * Create the element for the supplied player.
      *
      * @return the element object
      */

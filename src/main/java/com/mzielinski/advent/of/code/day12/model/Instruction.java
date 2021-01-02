@@ -19,6 +19,6 @@ public record Instruction(Command command, int value) {
 
     @Override
     public String toString() {
-        return "Command: " + command + ", value: " + value;
+        return "Command: " + command + ", card: " + value;
     }
 }

@@ -93,7 +93,7 @@ public class Day05Main {
         return seats.stream()
                 .map(Seat::calculateSeatId)
                 .max(Long::compare)
-                .orElseThrow(() -> new RuntimeException("Unable to compute max value"));
+                .orElseThrow(() -> new RuntimeException("Unable to compute max card"));
     }
 
     private List<Long> findMySeatId(List<Seat> seats) {

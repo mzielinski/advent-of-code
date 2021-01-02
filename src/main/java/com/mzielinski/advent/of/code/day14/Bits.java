@@ -80,8 +80,8 @@ public class Bits {
     @Override
     public String toString() {
         return "address=" + address +
-                ", value=" + value +
+                ", card=" + value +
                 ", mask=" + Arrays.toString(mask) +
-                ", index=" + index;
+                ", player=" + index;
     }
 }

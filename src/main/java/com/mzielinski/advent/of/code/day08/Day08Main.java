@@ -94,7 +94,7 @@ public class Day08Main {
             } else if (modifiedIndex == sizeOfAllInstructions) {
                 throw new RuntimeException("Cannot find any path which will not be finished with infinite loop");
             } else {
-                // try to modify next index;
+                // try to modify next player;
                 modifiedIndex++;
                 cleanup();
                 return false;
