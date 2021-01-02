@@ -13,6 +13,32 @@ record Food(List<Input> inputs) {
         return unknownIngredients;
     }
 
+    public List<String> canonicalDangerousIngredients() {
+        return allergenByIngredient().entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(Map.Entry::getValue)
+                .collect(toList());
+    }
+
+    private Map<String, String> allergenByIngredient() {
+        Map<String, Set<String>> knownIngredients = findKnownIngredients();
+        Map<String, String> ingredientsByAllergen = new HashMap<>();
+        while (ingredientsByAllergen.size() != knownIngredients.size()) {
+            // each time list is filtered by already found ingredients
+            knownIngredients.entrySet().stream()
+                    .peek(entry -> {
+                        entry.getValue().removeAll(ingredientsByAllergen.values());
+                    })
+                    .filter(entry -> entry.getValue().size() == 1)
+                    .forEach(entry -> {
+                        String ingredient = entry.getValue().stream().findAny().orElseThrow();
+                        String allergen = entry.getKey();
+                        ingredientsByAllergen.put(allergen, ingredient);
+                    });
+        }
+        return ingredientsByAllergen;
+    }
+
     private Map<String, Set<String>> findKnownIngredients() {
         Map<String, Set<String>> foodByAllergens = new HashMap<>();
         inputs.forEach(input -> input.allergens()
