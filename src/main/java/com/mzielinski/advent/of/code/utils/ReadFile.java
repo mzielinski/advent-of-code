@@ -15,7 +15,7 @@ public interface ReadFile<T> {
         InputStream stream = requireNonNull(ReadFile.class.getClassLoader().getResourceAsStream(filePath));
         try (Scanner scanner = new Scanner(stream)) {
             while (scanner.hasNextLine()) {
-                T recordMultiLines = getRecordMultiLines(scanner.nextLine(), lineNumber++);
+                T recordMultiLines = convertLine(scanner.nextLine(), lineNumber++);
                 if (recordMultiLines != null) {
                     records.add(recordMultiLines);
                 }
@@ -24,5 +24,5 @@ public interface ReadFile<T> {
         return records;
     }
 
-    T getRecordMultiLines(String nextLine, int lineNumber);
+    T convertLine(String nextLine, int lineNumber);
 }

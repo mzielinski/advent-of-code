@@ -69,7 +69,7 @@ public class Day04Main {
     static class Day04MainPart2Input implements MultilineReadFile<Passport> {
 
         @Override
-        public Passport getRecordMultiLines(String line, int lineNumber) {
+        public Passport convertLine(String line, int lineNumber) {
             Map<String, String> fields = new HashMap<>();
             String[] s = line.trim().replaceAll(";", " ").split(" ");
             for (String item : s) {

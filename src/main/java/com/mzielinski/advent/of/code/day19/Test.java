@@ -13,7 +13,7 @@ public class Test {
 
 
         @Override
-        public String getRecordMultiLines(String line, int lineNumber) {
+        public String convertLine(String line, int lineNumber) {
             return line;
         }
     }

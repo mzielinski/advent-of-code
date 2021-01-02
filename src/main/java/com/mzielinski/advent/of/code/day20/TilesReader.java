@@ -16,7 +16,7 @@ class TilesReader implements MultilineReadFile<Tile> {
     private final Pattern numberPattern = Pattern.compile("[\\d]+");
 
     @Override
-    public Tile getRecordMultiLines(String input, int lineNumber) {
+    public Tile convertLine(String input, int lineNumber) {
         List<String> lines = Arrays.stream(input.split(delimiter())).collect(toList());
 
         int id = lines.stream()

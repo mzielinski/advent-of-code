@@ -11,7 +11,7 @@ public class MessagesReader implements ReadFile<String> {
     }
 
     @Override
-    public String getRecordMultiLines(String line, int lineNumber) {
+    public String convertLine(String line, int lineNumber) {
         return line.matches("[ab]+") ? line : null;
     }
 }

@@ -54,7 +54,7 @@ public class Day08Main {
     static class Day08Input implements ReadFile<Instruction> {
 
         @Override
-        public Instruction getRecordMultiLines(String line, int lineNumber) {
+        public Instruction convertLine(String line, int lineNumber) {
             int value = 0;
             String name = "";
             try (Scanner fi = new Scanner(line)) {

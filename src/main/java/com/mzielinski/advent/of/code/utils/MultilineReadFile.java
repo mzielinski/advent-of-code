@@ -28,10 +28,10 @@ public interface MultilineReadFile<T> extends ReadFile<T> {
                 if (!scanner.hasNextLine()) {
                     // last line
                     next.append(currentLine).append(delimiter());
-                    records.add(getRecordMultiLines(next.toString(), index++));
+                    records.add(convertLine(next.toString(), index++));
                 } else if (isNextLine(currentLine)) {
                     // line between passports
-                    records.add(getRecordMultiLines(next.toString(), index));
+                    records.add(convertLine(next.toString(), index));
                     next = new StringBuilder();
                 } else {
                     // line inside single passport
@@ -42,5 +42,5 @@ public interface MultilineReadFile<T> extends ReadFile<T> {
         return records;
     }
 
-    T getRecordMultiLines(String nextLine, int lineNumber);
+    T convertLine(String nextLine, int lineNumber);
 }

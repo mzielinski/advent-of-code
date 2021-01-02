@@ -10,7 +10,7 @@ public class Day03Main {
     static class Day03MainPart2Input implements ReadFile<boolean[]> {
 
         @Override
-        public boolean[] getRecordMultiLines(String line, int lineNumber) {
+        public boolean[] convertLine(String line, int lineNumber) {
             char[] chars = line.toCharArray();
             boolean[] lineTable = new boolean[chars.length];
             for (int i = 0; i < chars.length; i++) {
