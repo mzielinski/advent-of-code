@@ -1,11 +1,10 @@
 package com.mzielinski.advent.of.code.day22;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
-record CombatGame(List<Day22.Player> players, boolean recursive, int subGame, Set<String> alreadyPerformedRound) {
+record CombatGame(List<Day22.Player> players, boolean recursive, int subGame, Set<String> alreadyUsedDecks) {
 
     public Day22.Player play() {
         Round round = calculateCurrentRound();
@@ -14,16 +13,7 @@ record CombatGame(List<Day22.Player> players, boolean recursive, int subGame, Se
                 .forEach(playerRound -> winner.deck().offer(playerRound.card()));
 
         return gameWinner()
-                .orElseGet(() -> new CombatGame(players, recursive, subGame, alreadyPerformedRound).play());
-    }
-
-    public String printCurrentDecks() {
-        return players().stream()
-                .map(Day22.Player::deck)
-                .map(ArrayList::new)
-                .flatMap(Collection::stream)
-                .map(String::valueOf)
-                .collect(Collectors.joining(","));
+                .orElseGet(() -> new CombatGame(players, recursive, subGame, alreadyUsedDecks).play());
     }
 
     private Day22.Player findWinner(Round round) {
@@ -65,7 +55,7 @@ record CombatGame(List<Day22.Player> players, boolean recursive, int subGame, Se
 
     private Optional<Day22.Player> gameWinner() {
         Day22.Player firstPlayer = players().get(0);
-        if (!alreadyPerformedRound.add(firstPlayer.printDeck())) {
+        if (!alreadyUsedDecks.add(firstPlayer.printDeck())) {
             return Optional.of(firstPlayer);
         }
         int allCards = countNumberOfCards();

@@ -82,6 +82,6 @@ public class Bits {
         return "address=" + address +
                 ", card=" + value +
                 ", mask=" + Arrays.toString(mask) +
-                ", player=" + index;
+                ", players=" + index;
     }
 }
