@@ -8,7 +8,7 @@ class Day22Test extends Specification {
     @Unroll
     def 'should find winning deck for #filePath'() {
         expect:
-        new Day22().printWinningDeck(filePath) == result
+        new Day22().printWinningDeck(filePath, false) == result
 
         where:
         filePath       || result
@@ -16,13 +16,24 @@ class Day22Test extends Specification {
     }
 
     @Unroll
-    def 'should calculate winner score for $filePath'() {
+    def 'should calculate winner score in Combat game for $filePath'() {
         expect:
-        new Day22().winnerScore(filePath) == result
+        new Day22().winnerScoreInCombat(filePath, false) == result
 
         where:
         filePath       || result
         'day22/01.txt' || 306
         'day22/02.txt' || 33473
+    }
+
+    @Unroll
+    def 'should calculate winner score in Recursive Combat game for $filePath'() {
+        expect:
+        new Day22().winnerScoreInCombat(filePath, true) == result
+
+        where:
+        filePath       || result
+        'day22/01.txt' || 291
+        'day22/02.txt' || 31793
     }
 }
