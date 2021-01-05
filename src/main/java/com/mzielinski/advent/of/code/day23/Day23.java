@@ -2,41 +2,43 @@ package com.mzielinski.advent.of.code.day23;
 
 import com.mzielinski.advent.of.code.day23.LinkedListWithFastGet.Node;
 
-import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static java.util.Comparator.naturalOrder;
 
 public class Day23 {
 
     static class Circle {
 
         private final LinkedListWithFastGet<Integer> cups;
+        private final int min;
+        private final int max;
         private Node<Integer> current;
 
-        Circle(List<Integer> cups) {
+        Circle(List<Integer> cups, int min, int max) {
             this.cups = new LinkedListWithFastGet<>(cups);
             this.current = this.cups.get(cups.get(0));
+            this.min = min;
+            this.max = max;
         }
 
         public void move() {
             List<Integer> pickedUp = cups.getAfter(current.item, 3);
-            int destination = findDestination(pickedUp);
+            Integer destination = findNextDestination(pickedUp, current.item, current.item - 1);
             cups.moveAfter(destination, pickedUp);
-
-            // move to next number
             current = current.next;
         }
 
-        private int findDestination(List<Integer> pickedUp) {
-            int j;
-            for (j = current.item - 2 + cups.size(); j > 0; j--) {
-                int n = j % cups.size() + 1;
-                if (!pickedUp.contains(n)) {
-                    break;
-                }
+        private int findNextDestination(List<Integer> pickedUp, Integer current, Integer proposedDestination) {
+            if (!Objects.equals(current, proposedDestination)
+                    && !pickedUp.contains(proposedDestination)
+                    && cups.contains(proposedDestination)) {
+                return proposedDestination;
             }
-            return j % cups.size() + 1;
+            return findNextDestination(pickedUp, current, proposedDestination - 1 >= min ? proposedDestination - 1 : max);
         }
 
         public String printCircleAfter(int mainCub) {
@@ -46,7 +48,7 @@ public class Day23 {
 
         public long cupsWithStars(int mainCub) {
             List<Integer> cupsAfter = cups.getAfter(mainCub, 2);
-            return (long) cupsAfter.get(0) * (long) cupsAfter.get(1);
+            return cupsAfter.get(0) * (long) cupsAfter.get(1);
         }
 
         public List<Integer> cups() {
@@ -61,10 +63,11 @@ public class Day23 {
         return circle;
     }
 
-    public long findHiddenTwoStars(int moves, Circle circle, int total, int cup) {
+    public long findHiddenTwoStars(int moves, Circle circle, int total, int mainCup) {
         List<Integer> cups = circle.cups();
-        Integer max = cups.stream().max(Comparator.naturalOrder()).orElseThrow();
-        IntStream.rangeClosed(max + 1, total).forEach(cups::add);
-        return moveCups(moves, new Circle(cups)).cupsWithStars(cup);
+        int initMin = cups.stream().min(naturalOrder()).orElseThrow();
+        int initMax = cups.stream().max(naturalOrder()).orElseThrow();
+        IntStream.rangeClosed(initMax + 1, total).forEach(cups::add);
+        return moveCups(moves, new Circle(cups, initMin, total)).cupsWithStars(mainCup);
     }
 }

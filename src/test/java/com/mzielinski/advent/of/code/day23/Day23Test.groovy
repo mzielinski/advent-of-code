@@ -8,7 +8,7 @@ class Day23Test extends Specification {
     @Unroll
     def 'should calculate cup circle after #moves moves and after cup no. #mainCup'() {
         given:
-        def circle = new Day23().moveCups(moves, new Day23.Circle(cups))
+        def circle = new Day23().moveCups(moves, new Day23.Circle(cups, 1, 9))
 
         expect:
         circle.printCircleAfter(mainCup) == result
@@ -23,7 +23,7 @@ class Day23Test extends Specification {
     @Unroll
     def 'should multiply two hidden stars after cup no. #mainCup after #moves and with #total cups'() {
         expect:
-        new Day23().findHiddenTwoStars(moves, new Day23.Circle(cups), total, mainCup) == result
+        new Day23().findHiddenTwoStars(moves, new Day23.Circle(cups, 1, total), total, mainCup) == result
 
         where:
         mainCup | moves    | cups                        | total   || result

@@ -2,14 +2,13 @@ package com.mzielinski.advent.of.code.day23;
 
 import java.util.*;
 
-// get, indexOf, contain are slow in classic LinkedList
+// get, indexOf, contain are too slow in classic LinkedList
 class LinkedListWithFastGet<E> {
 
     // implementation taken from linkedList
     static class Node<E> {
 
         E item;
-
         Node<E> next;
         Node<E> prev;
 
@@ -53,7 +52,7 @@ class LinkedListWithFastGet<E> {
         E lastOfSequence = sequence.get(sequence.size() - 1);
         E afterLastSequence = linkedList.get(lastOfSequence).next.item;
         E currentCup = linkedList.get(firstSequence).prev.item;
-        E afterDestination =  linkedList.get(destination).next.item;
+        E afterDestination = linkedList.get(destination).next.item;
 
         linkedList.get(lastOfSequence).next = linkedList.get(afterDestination);
         linkedList.get(afterDestination).prev = linkedList.get(lastOfSequence);
@@ -63,11 +62,11 @@ class LinkedListWithFastGet<E> {
         linkedList.get(afterLastSequence).prev = linkedList.get(currentCup);
     }
 
-    public List<E> getAfter(E key) {
+    List<E> getAfter(E key) {
         return getAfter(key, linkedList.size());
     }
 
-    public List<E> getAfter(E key, int limit) {
+    List<E> getAfter(E key, int limit) {
         Node<E> current = linkedList.get(key).next;
         List<E> result = new ArrayList<>();
         while (!Objects.equals(current.item, key) && result.size() < limit) {
@@ -77,8 +76,8 @@ class LinkedListWithFastGet<E> {
         return result;
     }
 
-    public int size() {
-        return linkedList.size();
+    boolean contains(E key) {
+        return linkedList.containsKey(key);
     }
 
     List<E> keySet() {
