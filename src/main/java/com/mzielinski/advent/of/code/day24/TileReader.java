@@ -21,6 +21,6 @@ class TileReader implements ReadFile<Day24.Tile> {
         while (matcher.find()) {
             directions.add(Direction.parseTo(matcher.group()));
         }
-        return new Day24.Tile(lineNumber, new Position(0, 0), Color.WHITE, directions);
+        return new Day24.Tile(new Position(0, 0), Color.WHITE, directions);
     }
 }
