@@ -89,7 +89,7 @@ public record ImageConverter(List<TileWithPosition> sortedTiles) {
     }
 
     private boolean isTileBorder(Point point, int size) {
-        return Tile.boardersConditions.entrySet().stream()
+        return Tile.boardersConditions.entrySet().parallelStream()
                 .anyMatch(entry -> entry.getValue().test(point, size));
     }
 }

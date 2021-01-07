@@ -20,7 +20,7 @@ record Image(List<Tile> tiles, List<TileWithPosition> sortedTiles) {
     }
 
     public Stream<Neighbour> findNeighbours(int id, String boarder) {
-        return tiles().stream()
+        return tiles().parallelStream()
                 .filter(tile -> tile.id() != id)
                 .map(tile -> tile.findNeighbour(boarder))
                 .filter(Optional::isPresent)
@@ -31,7 +31,7 @@ record Image(List<Tile> tiles, List<TileWithPosition> sortedTiles) {
         Map<Integer, TileWithPosition> image = new HashMap<>();
         Set<Integer> lastNeighbours = new HashSet<>();
         while (image.size() != tiles.size()) {
-            tiles.stream()
+            tiles.parallelStream()
                     .filter(tile -> tryToFindNextTile(image, lastNeighbours, tile))
                     .map(tile -> image.getOrDefault(tile.id(), new TileWithPosition(tile, new Position(0, 0))))
                     .findAny()
@@ -47,8 +47,6 @@ record Image(List<Tile> tiles, List<TileWithPosition> sortedTiles) {
                                 // save last neighbours
                                 lastNeighbours.clear();
                                 lastNeighbours.addAll(neighbours.keySet());
-
-                                printImage(image.values());
                             }
                     );
         }
@@ -56,7 +54,7 @@ record Image(List<Tile> tiles, List<TileWithPosition> sortedTiles) {
     }
 
     private Stream<Neighbour> findNeighbours(Tile tile, Map<Integer, TileWithPosition> image) {
-        return tile.standardBoarders().entrySet().stream()
+        return tile.standardBoarders().entrySet().parallelStream()
                 .flatMap(entry -> findNeighbours(tile.id(), entry.getKey()))
                 .filter(neighbour -> !image.containsKey(neighbour.id()));
     }
@@ -74,15 +72,15 @@ record Image(List<Tile> tiles, List<TileWithPosition> sortedTiles) {
         Map<String, DirectionWithReversed> boarders = neighbour.standardBoarders();
 
         // search common borders for all tiles already rotated
-        Map<String, DirectionWithReversed> allBorders = alreadyFittedTiles.values().stream()
+        Map<String, DirectionWithReversed> allBorders = alreadyFittedTiles.values().parallelStream()
                 .map(TileWithPosition::tile)
                 .map(Tile::standardBoarders)
-                .flatMap(entry -> entry.entrySet().stream())
+                .flatMap(entry -> entry.entrySet().parallelStream())
                 .filter(entry -> boarders.containsKey(entry.getKey()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         // main tile
-        String border = tile.tile().standardBoarders().keySet().stream()
+        String border = tile.tile().standardBoarders().keySet().parallelStream()
                 .filter(boarders::containsKey)
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -95,7 +93,7 @@ record Image(List<Tile> tiles, List<TileWithPosition> sortedTiles) {
     }
 
     private Tile findTile(int tileId) {
-        return tiles().stream()
+        return tiles().parallelStream()
                 .filter(tile -> tile.id() == tileId)
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("Cannot find tile with id " + tileId));
@@ -125,7 +123,7 @@ record Image(List<Tile> tiles, List<TileWithPosition> sortedTiles) {
     }
 
     private Integer findMin(Collection<TileWithPosition> tiles, Function<Position, Integer> function) {
-        return tiles.stream()
+        return tiles.parallelStream()
                 .map(TileWithPosition::position)
                 .map(function)
                 .min(Integer::compareTo)
@@ -133,7 +131,7 @@ record Image(List<Tile> tiles, List<TileWithPosition> sortedTiles) {
     }
 
     private Integer findMax(Collection<TileWithPosition> tiles, Function<Position, Integer> function) {
-        return tiles.stream()
+        return tiles.parallelStream()
                 .map(TileWithPosition::position)
                 .map(function)
                 .max(Integer::compareTo)
