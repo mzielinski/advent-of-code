@@ -125,8 +125,10 @@ public class Day24 {
     }
 
     public long countBlackTiles(String filePath, int days) {
-        Set<Tile> dayTiles = recalculateTiles(filePath);
-        return countBlackTileForGivenNumberOfDays(dayTiles, days);
+        Set<Tile> tiles = recalculateTiles(filePath).parallelStream()
+                .filter(tile -> tile.color() == Color.BLACK)
+                .collect(toSet());
+        return countBlackTileForGivenNumberOfDays(tiles, days);
     }
 
     private long countBlackTileForGivenNumberOfDays(Set<Tile> tiles, int day) {
@@ -140,20 +142,20 @@ public class Day24 {
     private Set<Tile> applyDayRules(Set<Tile> tiles) {
         Set<Tile> tilesWithNeighbours = new HashSet<>(tiles);
         tilesWithNeighbours.addAll(createNeighbours(tiles));
-        List<Position> tilesMarkedForColorsRevert = tilesWithNeighbours.stream()
+        List<Position> tilesMarkedForColorsRevert = tilesWithNeighbours.parallelStream()
                 .filter(tile -> markedForChangeColor(tiles, tile))
                 .map(Tile::position)
                 .collect(toList());
 
         // return only black tiles
-        return tilesWithNeighbours.stream()
+        return tilesWithNeighbours.parallelStream()
                 .map(tile -> tilesMarkedForColorsRevert.contains(tile.position()) ? tile.changeColor() : tile)
                 .filter(tile -> tile.color() == Color.BLACK)
                 .collect(toSet());
     }
 
     private Set<Tile> createNeighbours(Set<Tile> tiles) {
-        return tiles.stream()
+        return tiles.parallelStream()
                 .map(Tile::position)
                 .flatMap(this::createNeighbours)
                 .collect(toSet());
@@ -165,14 +167,14 @@ public class Day24 {
     }
 
     private long countBlackTiles(Set<Tile> tiles) {
-        return tiles.stream()
+        return tiles.parallelStream()
                 .map(Tile::color)
                 .filter(color -> color == Color.BLACK)
                 .count();
     }
 
     private long countBlackNeighbours(Position position, Set<Tile> tiles) {
-        return tiles.stream()
+        return tiles.parallelStream()
                 .filter(tile -> tile.color() == Color.BLACK)
                 .map(Tile::position)
                 .filter(tilePosition -> tilePosition.isNeighbour(position))
@@ -180,10 +182,10 @@ public class Day24 {
     }
 
     private Set<Tile> recalculateTiles(String filePath) {
-        List<Tile> recalculateTilePositions = new TileReader().readFile(filePath).stream()
+        List<Tile> recalculateTilePositions = new TileReader().readFile(filePath).parallelStream()
                 .map(Tile::recalculatePosition)
                 .collect(toList());
-        return recalculateTilePositions.stream()
+        return recalculateTilePositions.parallelStream()
                 .map(tile -> markedForChangeColor(recalculateTilePositions, tile.position) ? tile.changeColor() : tile)
                 .collect(toSet());
     }
