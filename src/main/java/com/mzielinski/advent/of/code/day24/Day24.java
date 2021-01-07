@@ -199,7 +199,7 @@ public class Day24 {
     }
 
     private boolean markedForChangeColor(List<Tile> recalculateTiles, Position position) {
-        return recalculateTiles.stream()
+        return recalculateTiles.parallelStream()
                 .filter(other -> Objects.equals(other.position, position))
                 .count() % 2 == 1;
     }
