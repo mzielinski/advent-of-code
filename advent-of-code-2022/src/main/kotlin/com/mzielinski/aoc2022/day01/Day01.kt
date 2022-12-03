@@ -7,8 +7,7 @@ class Day01 {
     }
 
     fun findMostCalories(data: List<String>, size: Int): Int {
-        return calculateCalories(data).subList(0, size)
-            .reduce { acc, value -> acc + value }
+        return calculateCalories(data).subList(0, size).sum()
     }
 
     private fun calculateCalories(data: List<String>): List<Int> {
