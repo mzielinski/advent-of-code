@@ -17,6 +17,6 @@ internal class Day03Test {
     @Test
     fun part02() {
         assertEquals(70, day03.compartmentsPart02(readFile("/day03/00.txt")))
-        assertEquals(70, day03.compartmentsPart02(readFile("/day03/01.txt")))
+        assertEquals(2758, day03.compartmentsPart02(readFile("/day03/01.txt")))
     }
 }
