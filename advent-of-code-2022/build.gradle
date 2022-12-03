@@ -3,7 +3,7 @@ plugins {
     id 'application'
 }
 
-group = 'org.example'
+group = 'org.mzielinski.aoc2022'
 version = '1.0-SNAPSHOT'
 
 repositories {
@@ -24,8 +24,4 @@ compileKotlin {
 
 compileTestKotlin {
     kotlinOptions.jvmTarget = '1.8'
-}
-
-application {
-    mainClassName = 'MainKt'
 }
