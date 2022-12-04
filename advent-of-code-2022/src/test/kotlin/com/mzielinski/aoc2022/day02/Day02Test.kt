@@ -17,6 +17,6 @@ internal class Day02Test {
     @Test
     fun part02() {
         assertEquals(12, day02.rockPaperScissors(readFile("/day02/00.txt"), "02"))
-        assertEquals(15691, day02.rockPaperScissors(readFile("/day02/01.txt"), "02"))
+        assertEquals(12989, day02.rockPaperScissors(readFile("/day02/01.txt"), "02"))
     }
 }
