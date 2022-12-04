@@ -1,6 +1,7 @@
 package com.mzielinski.aoc2022.day03
 
 class Day03 {
+
     fun compartments(lines: List<String>): Int {
         return lines.sumOf { line ->
             val first: MutableSet<Char> = line.substring(0, (line.length / 2)).toCharArray().toMutableSet()
