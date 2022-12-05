@@ -1,5 +1,7 @@
 package com.mzielinski.aoc2022.day05
 
+private const val EMPTY_ELEMENT = "_"
+
 class Day05 {
 
     fun stacks(lines: List<String>, part: String): String {
@@ -8,7 +10,7 @@ class Day05 {
             if (line == "") {
                 // skip
             } else if (line.matches(Regex("move \\d+ from \\d+ to \\d+"))) {
-                processCommands(line, stack, part)
+                processCommand(line, stack, part)
             } else {
                 convertToStack(line, stack)
             }
@@ -24,29 +26,28 @@ class Day05 {
                 if (stack.lastIndex < index) {
                     stack.add(index, ArrayDeque())
                 }
-                if (value != "_") {
+                if (value != EMPTY_ELEMENT) {
                     val currentStack = stack[index]
                     currentStack.add(value)
                 }
             }
     }
 
-    private fun processCommands(line: String, stack: MutableList<ArrayDeque<String>>, part: String) {
+    private fun processCommand(line: String, stack: MutableList<ArrayDeque<String>>, part: String) {
         val moveResult: MatchResult = Regex("\\d+").find(line)!!
         val fromResult: MatchResult = moveResult.next()!!
         val toResult: MatchResult = fromResult.next()!!
 
         val listSource: ArrayDeque<String> = stack[fromResult.value.toInt() - 1]
         val listTarget: ArrayDeque<String> = stack[toResult.value.toInt() - 1]
-        val elementToMove: List<String> = reversIfPart02(listSource.take(moveResult.value.toInt()), part)
 
-        elementToMove.forEach {
+        partLogic(listSource.take(moveResult.value.toInt()), part).forEach {
             listTarget.addFirst(it)
             listSource.removeFirst()
         }
     }
 
-    private fun reversIfPart02(source: List<String>, part: String): List<String> {
+    private fun partLogic(source: List<String>, part: String): List<String> {
         return if (part == "02") source.reversed()
         else source
     }
