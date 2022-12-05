@@ -44,17 +44,14 @@ class Day05 {
         val listSource: ArrayDeque<String> = stack[from]
         val listTarget: ArrayDeque<String> = stack[to]
 
-        if (part == "01") {
-            repeat((0..count).count() - 1) {
-                listTarget.addFirst(listSource.removeFirst())
-            }
-        } else if (part == "02") {
-            listSource.take(count)
-                .reversed()
-                .forEach {
-                    listTarget.addFirst(it)
-                    listSource.removeFirst()
-                }
+        reversIfPart02(listSource.take(count), part).forEach {
+            listTarget.addFirst(it)
+            listSource.removeFirst()
         }
+    }
+
+    private fun reversIfPart02(source: List<String>, part: String): List<String> {
+        return if (part == "02") source.reversed()
+        else source
     }
 }
