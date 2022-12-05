@@ -32,19 +32,15 @@ class Day05 {
     }
 
     private fun processCommands(line: String, stack: MutableList<ArrayDeque<String>>, part: String) {
+        val moveResult: MatchResult = Regex("\\d+").find(line)!!
+        val fromResult: MatchResult = moveResult.next()!!
+        val toResult: MatchResult = fromResult.next()!!
 
-        val moveResult = Regex("\\d+").find(line)
-        val fromResult = moveResult?.next()
-        val toResult = fromResult?.next()
+        val listSource: ArrayDeque<String> = stack[fromResult.value.toInt() - 1]
+        val listTarget: ArrayDeque<String> = stack[toResult.value.toInt() - 1]
+        val elementToMove: List<String> = reversIfPart02(listSource.take(moveResult.value.toInt()), part)
 
-        val count: Int = moveResult?.value?.toInt()!!
-        val from: Int = fromResult?.value?.toInt()!! - 1
-        val to: Int = toResult?.value?.toInt()!! - 1
-
-        val listSource: ArrayDeque<String> = stack[from]
-        val listTarget: ArrayDeque<String> = stack[to]
-
-        reversIfPart02(listSource.take(count), part).forEach {
+        elementToMove.forEach {
             listTarget.addFirst(it)
             listSource.removeFirst()
         }
