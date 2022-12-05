@@ -10,10 +10,13 @@ internal class Day05Test {
 
     @Test
     fun part01() {
-        Assertions.assertEquals(2, day05.todo(GodUtil.readFile("/day05/00.txt")))
+        Assertions.assertEquals("CMZ", day05.stacks(GodUtil.readFile("/day05/00.txt"), "01"))
+        Assertions.assertEquals("RNZLFZSJH", day05.stacks(GodUtil.readFile("/day05/01.txt"), "01"))
     }
 
     @Test
     fun part02() {
+        Assertions.assertEquals("MCD", day05.stacks(GodUtil.readFile("/day05/00.txt"), "02"))
+        Assertions.assertEquals("CNSFCGJSM", day05.stacks(GodUtil.readFile("/day05/01.txt"), "02"))
     }
 }
