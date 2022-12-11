@@ -1,13 +1,15 @@
 package com.mzielinski.aoc2022.day11
 
+import java.math.BigInteger
+
 class Day11 {
 
     class Monkey {
 
         var id: Int = -1
-        val items: MutableList<Int> = mutableListOf()
-        lateinit var operation: (Int) -> Int
-        lateinit var test: (Int) -> Boolean
+        val items: MutableList<BigInteger> = mutableListOf()
+        lateinit var operation: (BigInteger) -> BigInteger
+        lateinit var test: (BigInteger) -> Boolean
         var ifTrueMonkeyId: Int = -1
         var ifFalseMonkeyId: Int = -1
 
@@ -15,19 +17,23 @@ class Day11 {
             this.id = id
         }
 
-        fun addItem(item: Int) {
+        fun addItem(item: BigInteger) {
             this.items.add(item)
         }
 
-        fun withStartingItems(startingItems: List<Int>) {
+        fun removeItem(item: BigInteger) {
+            this.items.remove(item)
+        }
+
+        fun withStartingItems(startingItems: List<BigInteger>) {
             this.items.addAll(startingItems)
         }
 
-        fun withOperation(operation: (Int) -> Int) {
+        fun withOperation(operation: (BigInteger) -> BigInteger) {
             this.operation = operation
         }
 
-        fun withTest(test: (Int) -> Boolean) {
+        fun withTest(test: (BigInteger) -> Boolean) {
             this.test = test
         }
 
@@ -38,29 +44,24 @@ class Day11 {
         fun ifFalseMonkeyId(ifFalseMonkeyId: Int) {
             this.ifFalseMonkeyId = ifFalseMonkeyId
         }
-
-        fun removeItem(item: Int) {
-            this.items.remove(item)
-        }
     }
 
-    fun monkeyInTheMiddle(lines: List<String>): Int {
+    fun monkeyInTheMiddle(lines: List<String>, rounds: Int, part: String): Long {
         val monkeys: Map<Int, Monkey> = convertInput(lines)
-        val count: Map<Int, MutableList<Int>> = monkeys.keys.associateBy({ it }, { mutableListOf() })
-        repeat((0..19).count()) {
-            singleRound(monkeys, count)
+        val count: Map<Int, MutableList<BigInteger>> = monkeys.keys.associateBy({ it }, { mutableListOf() })
+        repeat((1..rounds).count()) {
+            singleRound(monkeys, count, part)
         }
 
-        return count.values.map { it.size }.sorted().reversed()
+        return count.values.map { it.size.toLong() }.sorted().reversed()
             .subList(0, 2)
             .reduce { acc, next -> acc * next }
     }
 
-    private fun singleRound(monkeys: Map<Int, Monkey>, count: Map<Int, MutableList<Int>>) {
+    private fun singleRound(monkeys: Map<Int, Monkey>, count: Map<Int, MutableList<BigInteger>>, part: String) {
         monkeys.values.forEach { monkey ->
             monkey.items.toList().forEach { item ->
-                var result: Int = monkey.operation.invoke(item)
-                result /= 3
+                val result: BigInteger = part(monkey.operation, item, part)
                 val newMonkeyId = when (monkey.test.invoke(result)) {
                     true -> monkey.ifTrueMonkeyId
                     false -> monkey.ifFalseMonkeyId
@@ -70,6 +71,22 @@ class Day11 {
                 count[monkey.id]!!.add(item)
             }
         }
+    }
+
+    private fun part(operation: (BigInteger) -> BigInteger, item: BigInteger, part: String): BigInteger {
+        val result: BigInteger = operation.invoke(item)
+        return when (part) {
+            "01" -> {
+                result.div(BigInteger.valueOf(3))
+            }
+
+            "02" -> {
+                result
+            }
+
+            else -> throw IllegalArgumentException("Part $part not supported")
+        }
+
     }
 
     private fun convertInput(lines: List<String>): Map<Int, Monkey> {
@@ -84,7 +101,7 @@ class Day11 {
                             val items = line.removePrefix("Starting items:").trim()
                                 .split(",")
                                 .map { it.trim() }
-                                .map { it.toInt() }
+                                .map { it.toBigInteger() }
                             monkey.withStartingItems(items)
                         } else if (line.matches(Regex("Operation: .+"))) {
                             val operations = line.removePrefix("Operation:").trim()
@@ -92,21 +109,21 @@ class Day11 {
                                 .split(" ")
                             when (operation[0]) {
                                 "*" -> monkey.withOperation {
-                                    if (operation[1] == "old") it * it
-                                    else it * operation[1].toInt()
+                                    if (operation[1] == "old") it.multiply(it)
+                                    else it.multiply(operation[1].toBigInteger())
                                 }
 
                                 "+" -> monkey.withOperation {
-                                    if (operation[1] == "old") it + it
-                                    else it + operation[1].toInt()
+                                    if (operation[1] == "old") it.add(it)
+                                    else it.add(operation[1].toBigInteger())
                                 }
 
                                 else -> throw IllegalArgumentException("Operation not supported: $line")
                             }
                         } else if (line.matches(Regex("Test: .*"))) {
                             val test = line.removePrefix("Test:").trim()
-                            val divisibleBy = test.removePrefix("divisible by").trim().toInt()
-                            monkey.withTest { it % divisibleBy == 0 }
+                            val divisibleBy = test.removePrefix("divisible by").trim().toBigInteger()
+                            monkey.withTest { it.rem(divisibleBy) == BigInteger.ZERO }
                         } else if (line.matches(Regex("^If .+"))) {
                             val ifCommand = line.replace("If", "")
                                 .replace("throw to monkey", "")
