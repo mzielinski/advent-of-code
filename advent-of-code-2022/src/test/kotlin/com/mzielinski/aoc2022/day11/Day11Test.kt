@@ -10,13 +10,13 @@ internal class Day11Test {
 
     @Test
     fun part01() {
-        assertEquals(10605, day11.monkeyInTheMiddle(readFile("/day11/00.txt"), 20, "01"))
-        assertEquals(102399, day11.monkeyInTheMiddle(readFile("/day11/01.txt"), 20, "01"))
+        assertEquals(10605, day11.monkeyInTheMiddle(readFile("/day11/00.txt"), 20))
+        assertEquals(102399, day11.monkeyInTheMiddle(readFile("/day11/01.txt"), 20))
     }
 
     @Test
     fun part02() {
-        assertEquals(2713310158, day11.monkeyInTheMiddle(readFile("/day11/00.txt"), 10000, "02"))
-        assertEquals(23641658401, day11.monkeyInTheMiddle(readFile("/day11/01.txt"), 10000, "02"))
+        assertEquals(2713310158, day11.monkeyInTheMiddle02(readFile("/day11/00.txt"), 10000))
+        assertEquals(23641658401, day11.monkeyInTheMiddle02(readFile("/day11/01.txt"), 10000))
     }
 }
